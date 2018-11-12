@@ -6,8 +6,8 @@ require "rave_ruby/version"
 Gem::Specification.new do |spec|
   spec.name          = "rave_ruby"
   spec.version       = RaveRuby::VERSION
-  spec.authors       = ["TODO: Write your name"]
-  spec.email         = ["jolaosoyusuf@gmail.com"]
+  spec.authors       = ["Iphytech"]
+  spec.email         = ["ifavour902@gmail.com"]
 
   spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
   spec.description   = %q{TODO: Write a longer description or delete this line.}
@@ -38,5 +38,4 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.17"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
 end
