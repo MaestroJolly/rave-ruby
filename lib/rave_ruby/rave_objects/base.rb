@@ -1,7 +1,7 @@
 require 'httparty'
 require_relative "../rave_modules/base_endpoints"
 require "json"
-require_relative "../error"
+require_relative "../exceptions"
 
 class Base
 
@@ -62,9 +62,31 @@ class Base
 
   def update_payload(suggested_auth, payload, pin=nil, address=nil)
     if suggested_auth == "PIN"
-      return payload.merge!({"suggested_auth" => pin})
+      return payload.merge!({"pin" => pin, "suggested_auth" => suggested_auth})
     elsif suggested_auth == "AVS_VBVSECURECODE"
-      return payload.merge!({"suggested_auth" => address})
+      return payload.merge!({"pin" => pin, "suggested_auth" => address})
     end
   end
+
+#   payload = {
+#     "cardno" => "5438898014560229",
+#     "cvv" => "890",
+#     "expirymonth" => "09",
+#     "expiryyear" => "19",
+#     "currency" => "NGN",
+#     "country" => "NG",
+#     "amount" => "10",
+#     "email" => "user@gmail.com",
+#     "phonenumber" => "0902620185",
+#     "firstname" => "temi",
+#     "lastname" => "desola",
+#     "IP" => "355426087298442",
+#     "txRef" => "MC-", # your unique merchant reference
+#     "meta" => "123949494DC",
+#     "redirect_url" => "https://rave-webhook.herokuapp.com/receivepayment",
+#     "device_fingerprint" => "69e6b7f0b72037aa8428b70fbe03986c"
+# }
+# suggested_auth = "PIN"
+
+# print update_payload(suggested_auth, payload, pin="3310")
 end

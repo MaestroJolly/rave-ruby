@@ -30,11 +30,11 @@ class Card < Base
         return post_request("#{base_url}#{BASE_ENDPOINTS::CHARGE_ENDPOINT}", payload) 
     end
 
-    def update_payload(suggested_auth, payload, pin=nil, address=nil)
-        if suggested_auth == "PIN"
-          return payload.merge!({"suggested_auth" => pin})
-        elsif suggested_auth == "AVS_VBVSECURECODE"
-          return payload.merge!({"suggested_auth" => address})
-        end
-    end
+    # def update_payload(suggested_auth, payload, pin=nil, address=nil)
+    #     if suggested_auth == "PIN"
+    #       return payload.merge!({"suggested_auth" => pin})
+    #     elsif suggested_auth == "AVS_VBVSECURECODE"
+    #       return payload.merge!({"suggested_auth" => address})
+    #     end
+    # end
 end
