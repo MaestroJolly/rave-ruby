@@ -1,37 +1,31 @@
 require_relative "./rave_ruby/rave_modules/base_endpoints"
+require_relative "rave_ruby/rave_objects/base/base"
 require_relative "./rave_ruby/rave_modules/util"
 require_relative "rave_ruby/rave_objects/list_banks"
 require_relative "rave_ruby/rave_objects/card"
+require_relative "rave_ruby/rave_objects/account"
+require_relative "rave_ruby/rave_objects/transfer"
 require_relative 'rave_ruby/error'
 
 
   class RaveRuby
       # include Util
       
-      attr_accessor :public_key, :secret_key, :production,  :env, :url
-      # data = {
-      #   "test" => "just test",
-      #   "one" => 1,
-      #   "bool" => true
-      # }
-      # encrypt = Util.encrypt(sec_key, data)
-      # print(encrypt)
-
-      # print ListBanks.list_banks("#{BASE_ENDPOINTS::RAVE_SANDBOX_URL}#{BASE_ENDPOINTS::BANKS_ENDPOINT}", {:json => 1})
+      attr_reader :public_key, :secret_key, :production,  :env, :url
 
       def initialize(public_key=nil, secret_key=nil, production = false, env=false)
 
-        self.public_key = public_key
-        self.secret_key = secret_key
-        self.production = production
-        self.env = env
+        @public_key = public_key
+        @secret_key = secret_key
+        @production = production
+        @env = env
         rave_sandbox_url = BASE_ENDPOINTS::RAVE_SANDBOX_URL
         rave_live_url = BASE_ENDPOINTS::RAVE_LIVE_URL
 
         if production == false
-            self.url =  rave_sandbox_url
+            @url =  rave_sandbox_url
         else
-            self.url = rave_live_url
+            @url = rave_live_url
         end
 
         if env == true
@@ -40,6 +34,7 @@ require_relative 'rave_ruby/error'
         else
           @public_key = public_key
           @secret_key = secret_key
+          warn "Warning: To ensure your rave account api keys are safe, It is best to always set your keys in the environment variable"
         end
 
         unless !@public_key.nil?

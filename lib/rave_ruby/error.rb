@@ -7,3 +7,15 @@ end
 
 class RaveBadKeyError < StandardError
 end
+
+class IncompleteParameterError < StandardError
+end
+
+class SuggestedAuthError < StandardError
+end
+
+class RequiredAuthError < StandardError
+end
+
+class InitiateTransferError < StandardError
+end
