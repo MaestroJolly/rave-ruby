@@ -6,4 +6,7 @@
 /pkg/
 /spec/reports/
 /tmp/
-test.rb
+card.rb
+account.rb
+list_bank.rb
+transfer.rb
