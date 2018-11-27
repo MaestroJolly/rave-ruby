@@ -1,7 +1,7 @@
 require_relative "base/charge_base.rb"
 require 'json'
 
-class Account < Charge
+class Account < ChargeBase
 
 # method to initiate the account payment 
 
@@ -18,6 +18,9 @@ class Account < Charge
 
         data.merge!({"PBFPubKey" => public_key})
 
+        required_parameters = ["accountbank", "accountnumber", "amount", "email", "phonenumber", "IP"]
+        check_passed_parameters(required_parameters, data)
+
         encrypt_data = Util.encrypt(hashed_secret_key, data)
 
         payload = {
@@ -30,7 +33,7 @@ class Account < Charge
         response = post_request("#{base_url}#{BASE_ENDPOINTS::CHARGE_ENDPOINT}", payload) 
 
         return handle_charge_response(response)
-        end
+    end
 
     def validate_charge(flwRef, otp)
         base_url = rave_object.base_url

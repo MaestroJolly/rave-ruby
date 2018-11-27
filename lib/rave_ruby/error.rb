@@ -19,3 +19,18 @@ end
 
 class InitiateTransferError < StandardError
 end
+
+class CreatePaymentPlanError < StandardError
+end
+
+class ListPaymentPlanError < StandardError
+end
+
+class FetchPaymentPlanError < StandardError
+end
+
+class CancelPaymentPlanError < StandardError
+end
+
+class EditPaymentPlanError < StandardError
+end

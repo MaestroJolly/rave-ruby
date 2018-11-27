@@ -8,60 +8,64 @@ rave = RaveRuby.new("FLWPUBK-92e93a5c487ad64939327052e113c813-X", "FLWSECK-61037
 
 # # This is used to initiate single transfer
 
-# payload = {
-#     "account_bank" => "044",
-#     "account_number" => "0690000044",
-#     "amount" => 500,
-#     "narration" => "New transfer",
-#     "currency" => "NGN",
-# }
+payload = {
+    "account_bank" => "044",
+    "account_number" => "0690000044",
+    "amount" => 500,
+    "narration" => "New transfer",
+    "currency" => "NGN",
+}
 
-# transfer = Transfer.new(rave)
+transfer = Transfer.new(rave)
 
-# response = transfer.initiate_transfer(payload)
+response = transfer.initiate_transfer(payload)
 
-# print response
+print response
 
 
 # This is used to send bulk transfer
 
-payload = {
-    "title" => "test",
-    "bulk_data" => [
-        {
-            "account_bank" => "044",
-            "account_number" => "0690000044",
-            "amount" => 500,
-            "narration" => "Bulk Transfer 1",
-            "currency" => "NGN",
-            "reference" => "MC-bulk-reference-1"
-        },
-        {
-            "account_bank" => "044",
-            "account_number" => "0690000034",
-            "amount" => 500,
-            "narration" => "Bulk Transfer 2",
-            "currency" => "NGN",
-            "reference" => "MC-bulk-reference-1"
-        }
-    ]
-}
+# payload = {
+#     "title" => "test",
+#     "bulk_data" => [
+#         {
+#             "account_bank" => "044",
+#             "account_number" => "0690000044",
+#             "amount" => 500,
+#             "narration" => "Bulk Transfer 1",
+#             "currency" => "NGN",
+#             "reference" => "MC-bulk-reference-1"
+#         },
+#         {
+#             "account_bank" => "044",
+#             "account_number" => "0690000034",
+#             "amount" => 500,
+#             "narration" => "Bulk Transfer 2",
+#             "currency" => "NGN",
+#             "reference" => "MC-bulk-reference-1"
+#         }
+#     ]
+# }
 
 
-transfer = Transfer.new(rave)
+# transfer = Transfer.new(rave)
 
-response = transfer.bulk_transfer(payload)
+# response = transfer.bulk_transfer(payload)
 
-print response
+# print response
 
-# This is used to get the transfer fee by taking in the currency
-response = transfer.get_fee("NGN")
-print response
+# # This is used to get the transfer fee by taking in the currency
+# response = transfer.get_fee("NGN")
+# print response
 
-# This is used to get the balance by taking in the currency
-response = transfer.get_balance("NGN")
-print response
+# # This is used to get the balance by taking in the currency
+# response = transfer.get_balance("NGN")
+# print response
 
-# This is used to fetch transfers by passing in the transaction reference
-response = transfer.fetch("Bulk Transfer 2")
-print response
+# # This is used to fetch a single transfer by passing in the transaction reference
+# response = transfer.fetch("Bulk Transfer 2")
+# print response
+
+# # This is used to fetch all transfer
+# response = transfer.fetch_all_transfers
+# print response

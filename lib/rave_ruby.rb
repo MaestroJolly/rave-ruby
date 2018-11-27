@@ -5,6 +5,8 @@ require_relative "rave_ruby/rave_objects/list_banks"
 require_relative "rave_ruby/rave_objects/card"
 require_relative "rave_ruby/rave_objects/account"
 require_relative "rave_ruby/rave_objects/transfer"
+require_relative "rave_ruby/rave_objects/mpesa"
+require_relative "rave_ruby/rave_objects/payment_plan"
 require_relative 'rave_ruby/error'
 
 

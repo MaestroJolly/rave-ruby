@@ -30,7 +30,7 @@ charge_account = Account.new(rave)
 
 response = charge_account.initiate_charge(payload)
 
-# # print response
+print response
 
 
 # # #  perform the second charge after payload is updated with suggested auth
@@ -41,7 +41,7 @@ response = charge_account.initiate_charge(payload)
 
 if response["validation_required"]
     response = charge_account.validate_charge(response["flwRef"], "12345")
-    # print response
+    print response
 end
 
 # # # verify charge

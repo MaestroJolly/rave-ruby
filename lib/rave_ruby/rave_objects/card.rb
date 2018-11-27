@@ -1,8 +1,7 @@
-# require_relative "base.rb"
 require_relative "base/charge_base.rb"
 require 'json'
 
-class Card < Charge
+class Card < ChargeBase
 
     # method to initiate card charge 
     def initiate_charge(data)

@@ -63,10 +63,17 @@ class Transfer < TransferBase
     end
 
 
-    # method to perform account fetch request
+    # method to fetch a single transfer
     def fetch(reference)
         base_url = rave_object.base_url
         response = get_request("#{base_url}#{BASE_ENDPOINTS::FETCH_ENDPOINT}", {"seckey" => rave_object.secret_key.dup, "reference" => reference})
+        return handle_fetch_status(response)
+    end
+
+    # method to fetch all transfers
+    def fetch_all_transfers
+        base_url = rave_object.base_url
+        response = get_request("#{base_url}#{BASE_ENDPOINTS::FETCH_ENDPOINT}", {"seckey" => rave_object.secret_key.dup})
         return handle_fetch_status(response)
     end
 end

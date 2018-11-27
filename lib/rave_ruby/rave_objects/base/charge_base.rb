@@ -1,6 +1,6 @@
 require_relative "base.rb"
 
-class Charge < Base
+class ChargeBase < Base
 
     # method to the passed suggested auth to the corresponding value in the available hash
   def get_auth_type(suggested_auth)
