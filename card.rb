@@ -32,7 +32,7 @@ charge_card = Card.new(rave)
 
 response = charge_card.initiate_charge(payload)
 
-# print response
+print response
 
 # update payload with suggested auth
 if response["message"] == "AUTH_SUGGESTION"
