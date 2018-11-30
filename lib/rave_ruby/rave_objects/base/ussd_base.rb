@@ -1,31 +1,41 @@
 require_relative "base.rb"
 
-class MobileMoneyBase < Base
+class UssdBase < Base
 
-    # method to handle mobile money charge response
-    def handle_charge_response(response)
+    # method to handle ussd charge response
+    def handle_charge_response(response, request)
         charge_response = response
         flwRef = charge_response["data"]["flwRef"]
         txRef = charge_response["data"]["txRef"]
         status = charge_response["data"]["status"]
         amount = charge_response["data"]["amount"]
+        charged_amount = charge_response["data"]["charged_amount"]
         currency = charge_response["data"]["currency"]
         payment_type = charge_response["data"]["paymentType"]
         charge_response_code = charge_response["data"]["chargeResponseCode"]
         charge_response_message = charge_response["data"]["chargeResponseMessage"]
+        validation_instruction = charge_response["data"]["validateInstructions"]
+
+        bank_list = {"gtb" => "058", "zenith" => "057"}
+        gtb_response_text = "To complete this transaction, please dial *737*50*#{charged_amount.ceil}*159#"
 
 
-        if charge_response_code == "00"
-            res = {"error": false, "status": status, "validation_required": false, "txRef": txRef, "flwRef": flwRef, "amount": amount, "currency": currency, "paymentType": payment_type}
-            return JSON.parse(res.to_json)
+        if charge_response_code == "02"
+            if request["accountbank"] == bank_list["gtb"]
+                res = {"error": false, "status": status, "validation_required": true, "txRef": txRef, "flwRef": flwRef, "validateInstruction": gtb_response_text, "amount": amount, "currency": currency, "paymentType": payment_type}
+                return JSON.parse(res.to_json)
+            else
+                res = {"error": false, "status": status, "validation_required": true, "txRef": txRef, "flwRef": flwRef, "validateInstruction": validation_instruction, "amount": amount, "currency": currency, "paymentType": payment_type}
+                return JSON.parse(res.to_json)
+            end
         else
-            res = {"error": false, "status": status, "validation_required": true, "txRef": txRef, "flwRef": flwRef, "amount": amount, "currency": currency, "paymentType": payment_type}
+            res = {"error": false, "status": status, "validation_required": false, "txRef": txRef, "flwRef": flwRef, "amount": amount, "currency": currency, "paymentType": payment_type}
             return JSON.parse(res.to_json)
         end
     end
 
 
-    # method to handle mobile money verify response
+    # method to handle ussd verify response
     def handle_verify_response(response)
         verify_response = response
         flwref = verify_response["data"]["flwref"]
@@ -43,7 +53,7 @@ class MobileMoneyBase < Base
             res = {"error": false, "status": status, "transaction_complete": true, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "chargecode": charge_code, "chargemessage": charge_message}
             return JSON.parse(res.to_json)
         else
-            res = {"error": false, "status": status, "transaction_complete": false, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "charge_code": charge_code, "chargemessage": charge_message}
+            res = {"error": false, "status": status, "transaction_complete": false, "txref": txref, "flwef": flwref, "amount": amount, "chargedamount": charged_amount, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "charge_code": charge_code, "chargemessage": charge_message}
             return JSON.parse(res.to_json)
         end
     end

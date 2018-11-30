@@ -39,10 +39,10 @@ class MpesaBase < Base
         charge_message = verify_response["data"]["chargemessage"]
 
         if charge_code == "00" && status == "successful"
-            res = {"error": false, "status": status, "transaction_complete": true, "txRef": txref, "flwRef": flwref, "amount": amount, "chargedamount": charged_amount, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "chargecode": charge_code, "chargemessage": charge_message}
+            res = {"error": false, "status": status, "transaction_complete": true, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "chargecode": charge_code, "chargemessage": charge_message}
             return JSON.parse(res.to_json)
         else
-            res = {"error": false, "status": status, "transaction_complete": false, "txRef": txref, "flwRef": flwref, "amount": amount, "chargedamount": charged_amount, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "charge_code": charge_code, "chargemessage": charge_message}
+            res = {"error": false, "status": status, "transaction_complete": false, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "charge_code": charge_code, "chargemessage": charge_message}
             return JSON.parse(res.to_json)
         end
     end

@@ -132,10 +132,10 @@ class ChargeBase < Base
     card_token = verify_response["data"]["card"]["card_tokens"][0]["embedtoken"]
 
     if charge_code == "00" && status == "successful"
-      res = {"error": false, "status": status, "transaction_complete": true, "txRef": txref, "flwRef": flwref, "amount": amount, "chargedamount": charged_amount, "cardToken": card_token, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "chargecode": charge_code, "chargemessage": charge_message}
+      res = {"error": false, "status": status, "transaction_complete": true, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "cardToken": card_token, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "chargecode": charge_code, "chargemessage": charge_message}
       return JSON.parse(res.to_json)
     else
-      res = {"error": true, "status": status, "transaction_complete": false, "txRef": txref, "flwRef": flwref, "amount": amount, "chargedamount": charged_amount, "cardToken": card_token, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "charge_code": charge_code, "chargemessage": charge_message}
+      res = {"error": true, "status": status, "transaction_complete": false, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "cardToken": card_token, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "charge_code": charge_code, "chargemessage": charge_message}
       return JSON.parse(res.to_json)
     end
   end
@@ -157,10 +157,10 @@ class ChargeBase < Base
     account_token = verify_response["data"]["account"]["account_token"]["token"]
 
     if charge_code == "00" && status == "successful"
-      res = {"error": false, "status": status, "transaction_complete": true, "txRef": txref, "flwRef": flwref, "amount": amount, "chargedamount": charged_amount, "acctmessage": account_message, "accountToken": account_token, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "chargecode": charge_code, "chargemessage": charge_message}
+      res = {"error": false, "status": status, "transaction_complete": true, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "acctmessage": account_message, "accountToken": account_token, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "chargecode": charge_code, "chargemessage": charge_message}
       return JSON.parse(res.to_json)
     else
-      res = {"error": true, "status": status, "transaction_complete": false, "txRef": txref, "flwRef": flwref, "amount": amount, "chargedamount": charged_amount, "acctmessage": account_message, "accountToken": account_token, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "charge_code": charge_code, "chargemessage": charge_message}
+      res = {"error": true, "status": status, "transaction_complete": false, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "acctmessage": account_message, "accountToken": account_token, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "charge_code": charge_code, "chargemessage": charge_message}
       return JSON.parse(res.to_json)
     end
   end

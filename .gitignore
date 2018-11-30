@@ -12,3 +12,5 @@ account.rb
 transfer.rb
 mpesa.rb
 mobile_money.rb
+ussd.rb
+preauth.rb
