@@ -10,6 +10,7 @@ require_relative "rave_ruby/rave_objects/mobile_money"
 require_relative "rave_ruby/rave_objects/payment_plan"
 require_relative "rave_ruby/rave_objects/ussd"
 require_relative "rave_ruby/rave_objects/preauth"
+require_relative "rave_ruby/rave_objects/sub_account"
 require_relative 'rave_ruby/error'
 
 
