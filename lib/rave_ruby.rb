@@ -17,10 +17,11 @@ require_relative 'rave_ruby/error'
 
 
   class RaveRuby
-      # include Util
       
       attr_reader :public_key, :secret_key, :production,  :env, :url
 
+      # method to initialize rave object
+      
       def initialize(public_key=nil, secret_key=nil, production = false, env=false)
 
         @public_key = public_key
@@ -30,12 +31,14 @@ require_relative 'rave_ruby/error'
         rave_sandbox_url = BASE_ENDPOINTS::RAVE_SANDBOX_URL
         rave_live_url = BASE_ENDPOINTS::RAVE_LIVE_URL
 
+        # set rave url to sandbox or live if we are in production or development
         if production == false
             @url =  rave_sandbox_url
         else
             @url = rave_live_url
         end
 
+        # check if we set our public and secret keys to the environment variable
         if env == true
           @public_key = ENV['RAVE_PUBLIC_KEY']
           @secret_key = ENV['RAVE_SECRET_KEY']
@@ -45,20 +48,26 @@ require_relative 'rave_ruby/error'
           warn "Warning: To ensure your rave account api keys are safe, It is best to always set your keys in the environment variable"
         end
 
+        # raise this error if no public key is passed
         unless !@public_key.nil?
           raise RaveBadKeyError, "No public key supplied and couldn't find any in environment variables. Make sure to set public key as an environment variable RAVE_PUBLIC_KEY"
         end
+        # raise this error if invalid public key is passed
         unless @public_key[0..7] == 'FLWPUBK-'
           raise RaveBadKeyError, "Invalid public key #{@public_key}"
         end
         
+        # raise this error if no secret key is passed
         unless !@secret_key.nil?
           raise RaveBadKeyError, "No secret key supplied and couldn't find any in environment variables. Make sure to set secret key as an environment variable RAVE_SECRET_KEY"
         end
+        # raise this error if invalid secret key is passed
         unless @secret_key[0..7] == 'FLWSECK-'
           raise RaveBadKeyError, "Invalid secret key #{@secret_key}"
         end
   end
+
+  # method to return the base url
   def base_url
     return url
   end

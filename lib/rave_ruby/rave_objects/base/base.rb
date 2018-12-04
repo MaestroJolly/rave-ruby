@@ -76,12 +76,6 @@ class Base
       return response
     end
 
-      
-
-    # if response.success?
-    #     raise RaveServerError.new(response), "#{response["data"]["suggested_auth"]} is required."
-    #     return response
-    # end
   end
 
   # method to check if the passed parameters is equal to the expected parameters
@@ -90,7 +84,7 @@ class Base
     # This is used to check if the passed authorization parameters matches the required parameters
     required_params.each do |k, v|
       if !passed_params.key?(k)
-        raise IncompleteParameterError, "Parameters Incomplete, Please pass in complete parameters"
+        raise IncompleteParameterError, "Parameters Incomplete, Missing Parameter: #{k}, Please pass in the complete parameter."
       end
       # return true
     end

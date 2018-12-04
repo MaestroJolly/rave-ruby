@@ -11,25 +11,22 @@ class PaymentPlan < PaymentPlanBase
 
         data.merge!({"seckey" => secret_key.dup})
 
-        payload = {
-            "seckey" => secret_key,
-            "client" => data,
-            "alg" => "3DES-24"
-        }
+        required_parameters = ["amount", "name", "interval"]
+        check_passed_parameters(required_parameters, data)
 
-        payload = payload.to_json
+        payload = data.to_json
         response = post_request("#{base_url}#{BASE_ENDPOINTS::PAYMENT_PLANS_ENDPOINT}/create", payload) 
 
         return handle_create_response(response)
     end 
 
-    def list_payment_plan()
+    def list_payment_plan
         base_url = rave_object.base_url
         response = get_request("#{base_url}#{BASE_ENDPOINTS::PAYMENT_PLANS_ENDPOINT}/query",{"seckey" => rave_object.secret_key.dup})
         return handle_list_response(response)
     end 
 
-    def fetch_payment_plan(id,q )
+    def fetch_payment_plan(id,q=nil )
         base_url = rave_object.base_url
         secret_key = rave_object.secret_key.dup
 
@@ -57,12 +54,7 @@ class PaymentPlan < PaymentPlanBase
 
         data.merge!({"seckey" => secret_key.dup})
 
-        payload = {
-            "seckey" => secret_key,
-            "client" => data,
-            "alg" => "3DES-24"
-        }
-        payload = payload.to_json
+        payload = data.to_json
         response = post_request("#{base_url}#{BASE_ENDPOINTS::PAYMENT_PLANS_ENDPOINT}/#{id}/edit",payload)
         return handle_edit_response(response)
     end
