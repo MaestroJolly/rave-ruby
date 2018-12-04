@@ -7,7 +7,6 @@ class PaymentPlanBase < Base
     def handle_create_response(response)
 
         create_response = response
-        # print create_response
         statusMessage = create_response["status"]
         message = create_response["message"]
         id = create_response["data"]["id"]

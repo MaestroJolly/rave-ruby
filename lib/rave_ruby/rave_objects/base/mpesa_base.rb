@@ -27,22 +27,14 @@ class MpesaBase < Base
     # method to handle mpesa verify response
     def handle_verify_response(response)
         verify_response = response
-        flwref = verify_response["data"]["flwref"]
-        txref = verify_response["data"]["txref"]
         status = verify_response["data"]["status"]
-        charged_amount = verify_response["data"]["chargedamount"]
-        amount = verify_response["data"]["amount"]
-        vbvmessage = verify_response["data"]["vbvmessage"]
-        vbvcode = verify_response["data"]["vbvcode"]
-        currency = verify_response["data"]["currency"]
         charge_code = verify_response["data"]["chargecode"]
-        charge_message = verify_response["data"]["chargemessage"]
 
         if charge_code == "00" && status == "successful"
-            res = {"error": false, "status": status, "transaction_complete": true, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "chargecode": charge_code, "chargemessage": charge_message}
+            res = {"error": false, "transaction_complete": true, "data": verify_response["data"]}
             return JSON.parse(res.to_json)
         else
-            res = {"error": false, "status": status, "transaction_complete": false, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "charge_code": charge_code, "chargemessage": charge_message}
+            res = {"error": false, "transaction_complete": false, "data": verify_response["data"]}
             return JSON.parse(res.to_json)
         end
     end

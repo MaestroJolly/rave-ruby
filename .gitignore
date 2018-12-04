@@ -15,3 +15,5 @@ mobile_money_test.rb
 ussd_test.rb
 preauth_test.rb
 sub_account_test.rb
+subscriptionTest.rb
+uganda_mobile_money_test.rb

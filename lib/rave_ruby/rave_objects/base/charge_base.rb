@@ -46,6 +46,7 @@ class ChargeBase < Base
     amount = charge_response["data"]["amount"]
     currency = charge_response["data"]["currency"]
     auth_model_used = charge_response["data"]["authModelUsed"]
+    validate_instruction = charge_response["data"]["validateInstruction"]
     payment_type = charge_response["data"]["paymentType"]
     charge_response_code = charge_response["data"]["chargeResponseCode"]
     charge_response_message = charge_response["data"]["chargeResponseMessage"]
@@ -58,10 +59,10 @@ class ChargeBase < Base
     end
 
     if charge_response_code == "00"
-      res = {"error": false, "status": status, "validation_required": false, "txRef": txRef, "flwRef": flwRef, "chargeResponseCode": charge_response_code, "chargeResponseMessage": charge_response_message, "amount": amount, "currency": currency, "paymentType": payment_type, "authModelUsed": auth_model_used, "authurl": authurl}
+      res = {"error": false, "status": status, "validation_required": false, "txRef": txRef, "flwRef": flwRef, "chargeResponseCode": charge_response_code, "chargeResponseMessage": charge_response_message, "amount": amount, "currency": currency, "validateInstruction": validate_instruction, "paymentType": payment_type, "authModelUsed": auth_model_used, "authurl": authurl}
       return JSON.parse(res.to_json)
     elsif charge_response_code == "02"
-      res = {"error": false, "status": status, "validation_required": true, "txRef": txRef, "flwRef": flwRef, "chargeResponseCode": charge_response_code, "chargeResponseMessage": charge_response_message, "amount": amount, "currency": currency, "paymentType": payment_type, "authModelUsed": auth_model_used, "authurl": authurl}
+      res = {"error": false, "status": status, "validation_required": true, "txRef": txRef, "flwRef": flwRef, "chargeResponseCode": charge_response_code, "chargeResponseMessage": charge_response_message, "amount": amount, "currency": currency, "validateInstruction": validate_instruction, "paymentType": payment_type, "authModelUsed": auth_model_used, "authurl": authurl}
       return JSON.parse(res.to_json)
     else
       # return charge_response
@@ -119,23 +120,15 @@ class ChargeBase < Base
   # method to handle card verify response
   def handle_verify_response(response)
     verify_response = response
-    flwref = verify_response["data"]["flwref"]
-    txref = verify_response["data"]["txref"]
     status = verify_response["data"]["status"]
-    charged_amount = verify_response["data"]["chargedamount"]
-    amount = verify_response["data"]["amount"]
-    vbvmessage = verify_response["data"]["vbvmessage"]
-    vbvcode = verify_response["data"]["vbvcode"]
-    currency = verify_response["data"]["currency"]
     charge_code = verify_response["data"]["chargecode"]
-    charge_message = verify_response["data"]["chargemessage"]
-    card_token = verify_response["data"]["card"]["card_tokens"][0]["embedtoken"]
+
 
     if charge_code == "00" && status == "successful"
-      res = {"error": false, "status": status, "transaction_complete": true, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "cardToken": card_token, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "chargecode": charge_code, "chargemessage": charge_message}
+      res = {"error": false, "transaction_complete": true, "data": verify_response["data"]}
       return JSON.parse(res.to_json)
     else
-      res = {"error": true, "status": status, "transaction_complete": false, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "cardToken": card_token, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "charge_code": charge_code, "chargemessage": charge_message}
+      res = {"error": true, "transaction_complete": false, "data": verify_response["data"]}
       return JSON.parse(res.to_json)
     end
   end
@@ -143,24 +136,14 @@ class ChargeBase < Base
   # method to handle account verify response
   def handle_verify_account_response(response)
     verify_response = response
-    flwref = verify_response["data"]["flwref"]
-    txref = verify_response["data"]["txref"]
     status = verify_response["data"]["status"]
-    charged_amount = verify_response["data"]["chargedamount"]
-    amount = verify_response["data"]["amount"]
-    vbvmessage = verify_response["data"]["vbvmessage"]
-    vbvcode = verify_response["data"]["vbvcode"]
-    currency = verify_response["data"]["currency"]
     charge_code = verify_response["data"]["chargecode"]
-    charge_message = verify_response["data"]["chargemessage"]
-    account_message = verify_response["data"]["acctmessage"]
-    account_token = verify_response["data"]["account"]["account_token"]["token"]
 
     if charge_code == "00" && status == "successful"
-      res = {"error": false, "status": status, "transaction_complete": true, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "acctmessage": account_message, "accountToken": account_token, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "chargecode": charge_code, "chargemessage": charge_message}
+      res = {"error": false, "transaction_complete": true, "data": verify_response["data"]}
       return JSON.parse(res.to_json)
     else
-      res = {"error": true, "status": status, "transaction_complete": false, "txref": txref, "flwref": flwref, "amount": amount, "chargedamount": charged_amount, "acctmessage": account_message, "accountToken": account_token, "vbvmessage": vbvmessage, "vbvcode": vbvcode, "currency": currency, "charge_code": charge_code, "chargemessage": charge_message}
+      res = {"error": true, "transaction_complete": false, "data": verify_response["data"]}
       return JSON.parse(res.to_json)
     end
   end

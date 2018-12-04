@@ -1,8 +1,8 @@
 require_relative "base/mobile_money_base.rb"
 require 'json'
 
-class MobileMoney < MobileMoneyBase
-    # method to initiate mobile money transaction
+class UgandaMobileMoney < MobileMoneyBase
+    # method to initiate uganda mobile money transaction
     def initiate_charge(data)
 
         base_url = rave_object.base_url
@@ -20,7 +20,7 @@ class MobileMoney < MobileMoneyBase
             data.merge!({"orderRef" => Util.transaction_reference_generator})
         end
 
-        data.merge!({"PBFPubKey" => public_key, "payment_type" => "mobilemoneygh", "country" => "GH", "is_mobile_money_gh"=> 1, "currency" => "GHS"})
+        data.merge!({"PBFPubKey" => public_key, "payment_type" => "mobilemoneyuganda", "country" => "NG", "is_mobile_money_ug"=> 1, "currency" => "UGX"})
 
         required_parameters = ["amount", "email", "phonenumber", "network", "IP"]
         check_passed_parameters(required_parameters, data)
@@ -40,7 +40,7 @@ class MobileMoney < MobileMoneyBase
 
     end
 
-    # method to verify mobile money transaction
+    # method to verify uganda mobile money transaction
     def verify_charge(txref)
         base_url = rave_object.base_url
 

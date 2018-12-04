@@ -34,3 +34,15 @@ end
 
 class EditPaymentPlanError < StandardError
 end
+
+class ListSubscriptionError < StandardError
+end
+
+class FetchSubscriptionError < StandardError
+end
+
+class CancelSubscriptionError < StandardError
+end
+
+class ActivateSubscriptionError < StandardError
+end
