@@ -2,10 +2,12 @@
 /.yardoc
 /_yardoc/
 /coverage/
+/Gemfile.lock
 /doc/
 /pkg/
 /spec/reports/
 /tmp/
+.rspec_status
 card_test.rb
 list_bank_test.rb
 account_test.rb

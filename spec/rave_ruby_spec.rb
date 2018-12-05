@@ -1,10 +1,9 @@
-
 require 'spec_helper'
 
-RSpec.describe RaveRuby do
+test_public_key = "FLWPUBK-92e93a5c487ad64939327052e113c813-X"
+test_secret_key = "FLWSECK-61037cfe3cfc53b03e339ee201fa98f5-X"
 
-  test_public_key = "FLWSECK-61037cfe3cfc53b03e339ee201fa98f5-X"
-  test_secret_key = "FLWPUBK-92e93a5c487ad64939327052e113c813-X"
+RSpec.describe RaveRuby do
 
   it "has a version number" do
     expect(RaveRuby::VERSION).not_to be nil

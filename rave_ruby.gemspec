@@ -6,12 +6,12 @@ require "rave_ruby/version"
 Gem::Specification.new do |spec|
   spec.name          = "rave_ruby"
   spec.version       = RaveRuby::VERSION
-  spec.authors       = ["Iphytech"]
-  spec.email         = ["ifavour902@gmail.com"]
+  spec.authors       = ["MaestroJolly"]
+  spec.email         = ["jolaosoyusuf@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Ruby Gem For Rave Payments By Flutterwave.}
+  spec.description   = %q{This is the official Ruby Gem For Rave Payments which includes Card, Account, Transfer, Subaccount, Subscription, Mpesa, Ghana Mobile Money, Ussd, Payment Plans, and Transfer payment methods.}
+  spec.homepage      = "https://github.com/MaestroJolly/rave-ruby"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -20,8 +20,8 @@ Gem::Specification.new do |spec|
     spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
     spec.metadata["homepage_uri"] = spec.homepage
-    spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-    spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+    spec.metadata["source_code_uri"] = spec.homepage
+    spec.metadata["changelog_uri"] = spec.homepage
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
@@ -38,4 +38,8 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.17"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rspec", "~> 3.2"
+
+
+  spec.add_runtime_dependency 'httparty', '~> 0.16.2'
 end

@@ -1,4 +1,4 @@
-require "bundler/setup"
+# require "bundler/setup"
 require "rave_ruby"
 
 RSpec.configure do |config|
