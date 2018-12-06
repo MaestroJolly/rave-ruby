@@ -5,16 +5,26 @@ test_secret_key = "FLWSECK-61037cfe3cfc53b03e339ee201fa98f5-X"
 
 RSpec.describe RaveRuby do
 
-  it "has a version number" do
-    expect(RaveRuby::VERSION).not_to be nil
-  end
+  rave = RaveRuby.new(test_public_key, test_secret_key)
 
-  it "does something useful" do
-    expect(false).to eq(true)
-  end
+  # it "has a version number" do
+  #   expect(RaveRuby::VERSION).not_to be nil
+  # end
 
-  it "it should return the valid object" do
-    rave = RaveRuby.new(test_public_key, test_secret_key)
+  # it "does something useful" do
+  #   expect(false).to eq(true)
+  # end
+
+  it "should return the valid rave object" do
 		expect(rave.nil?).to eq(false)
   end
+
+  it "should return valid public key" do
+    expect(rave.public_key[0..7]).to eq("FLWPUBK-")
+  end
+
+  it "should return valid private key" do
+    expect(rave.secret_key[0..7]).to eq("FLWSECK-")
+  end
+  
 end

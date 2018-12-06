@@ -20,3 +20,4 @@ sub_account_test.rb
 subscriptionTest.rb
 uganda_mobile_money_test.rb
 payment_plan_test.rb
+env.rb

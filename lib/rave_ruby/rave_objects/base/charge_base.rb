@@ -42,7 +42,10 @@ class ChargeBase < Base
     charge_response = response
     flwRef = charge_response["data"]["flwRef"]
     txRef = charge_response["data"]["txRef"]
-    status = charge_response["data"]["status"]
+    # status = charge_response["data"]["status"]
+    message = charge_response["message"]
+    status = charge_response["status"]
+    suggested_auth = charge_response["data"]["suggested_auth"]
     amount = charge_response["data"]["amount"]
     currency = charge_response["data"]["currency"]
     auth_model_used = charge_response["data"]["authModelUsed"]
@@ -59,15 +62,15 @@ class ChargeBase < Base
     end
 
     if charge_response_code == "00"
-      res = {"error": false, "status": status, "validation_required": false, "txRef": txRef, "flwRef": flwRef, "chargeResponseCode": charge_response_code, "chargeResponseMessage": charge_response_message, "amount": amount, "currency": currency, "validateInstruction": validate_instruction, "paymentType": payment_type, "authModelUsed": auth_model_used, "authurl": authurl}
-      return JSON.parse(res.to_json)
-    elsif charge_response_code == "02"
-      res = {"error": false, "status": status, "validation_required": true, "txRef": txRef, "flwRef": flwRef, "chargeResponseCode": charge_response_code, "chargeResponseMessage": charge_response_message, "amount": amount, "currency": currency, "validateInstruction": validate_instruction, "paymentType": payment_type, "authModelUsed": auth_model_used, "authurl": authurl}
+      res = {"error": false, "status": status, "validation_required": false, "message": message, "suggested_auth": suggested_auth, "txRef": txRef, "flwRef": flwRef, "chargeResponseCode": charge_response_code, "chargeResponseMessage": charge_response_message, "amount": amount, "currency": currency, "validateInstruction": validate_instruction, "paymentType": payment_type, "authModelUsed": auth_model_used, "authurl": authurl}
       return JSON.parse(res.to_json)
     else
-      # return charge_response
-      res = {"status": charge_response["status"], "message": charge_response["message"], "data": charge_response["data"]}
+      res = {"error": false, "status": status, "validation_required": true, "message": message, "suggested_auth": suggested_auth, "txRef": txRef, "flwRef": flwRef, "chargeResponseCode": charge_response_code, "chargeResponseMessage": charge_response_message, "amount": amount, "currency": currency, "validateInstruction": validate_instruction, "paymentType": payment_type, "authModelUsed": auth_model_used, "authurl": authurl}
       return JSON.parse(res.to_json)
+    # else
+    #   # return charge_response
+    #   res = {"status": charge_response["status"], "message": charge_response["message"], "data": charge_response["data"]}
+    #   return JSON.parse(res.to_json)
     end
   end
 

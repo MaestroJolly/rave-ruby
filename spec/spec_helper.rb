@@ -1,5 +1,7 @@
 # require "bundler/setup"
 require "rave_ruby"
+require_relative "../lib/rave_ruby/rave_objects/card"
+
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
