@@ -21,24 +21,92 @@ payload = {
   "device_fingerprint" => "69e6b7f0b72037aa8428b70fbe03986c"
 }
 
+pin_payload = {
+  "cardno" => "5438898014560229",
+  "cvv" => "890",
+  "expirymonth" => "09",
+  "expiryyear" => "19",
+  "currency" => "NGN",
+  "country" => "NG",
+  "amount" => "10",
+  "email" => "user@gmail.com",
+  "phonenumber" => "0902620185",
+  "suggested_auth" => "PIN",
+  "pin" => "3310",
+  "firstname" => "temi",
+  "lastname" => "desola",
+  "IP" => "355426087298442",
+  "meta" => [{"metaname": "flightID", "metavalue": "123949494DC"}],
+  "redirect_url" => "https://rave-webhook.herokuapp.com/receivepayment",
+  "device_fingerprint" => "69e6b7f0b72037aa8428b70fbe03986c"
+}
+
+avs_payload = {
+  "cardno" => "4556052704172643",
+  "cvv" => "828",
+  "expirymonth" => "09",
+  "expiryyear" => "19",
+  "currency" => "USD",
+  "country" => "NG",
+  "amount" => "10",
+  "email" => "user@gmail.com",
+  "phonenumber" => "0902620185",
+  "firstname" => "temi",
+  "lastname" => "desola",
+  "IP" => "355426087298442",
+  "meta" => [{"metaname": "flightID", "metavalue": "123949494DC"}],
+  "redirect_url" => "https://rave-webhook.herokuapp.com/receivepayment",
+  "device_fingerprint" => "69e6b7f0b72037aa8428b70fbe03986c",
+  "billingzip"=> "07205", 
+  "billingcity"=> "Hillside", 
+  "billingaddress"=> "470 Mundet PI", 
+  "billingstate"=> "NJ", 
+  "billingcountry"=> "US"
+}
+
 RSpec.describe Card do
 
   rave = RaveRuby.new(test_public_key, test_secret_key)
 
+  context "when a merchant tries to charge a customers card" do
+    it "should return a card object" do
+      charge_card =  Card.new(rave)
+      expect(charge_card.nil?).to eq(false)
+    end
   
-  it "should return the valid rave object" do
-		expect(rave.nil?).to eq(false)
-  end
+    it 'should check if authentication is required after charging a card' do
+      charge_card = Card.new(rave)
+      response = charge_card.initiate_charge(payload)
+      expect(response["suggested_auth"].nil?).to eq(false)
+    end
 
-  it "should return a card object" do
-    charge_card =  Card.new(rave)
-		expect(charge_card.nil?).to eq(false)
-  end
+    it 'should successfully charge card with suggested auth PIN' do
+      charge_card = Card.new(rave)
+      response = charge_card.initiate_charge(pin_payload)
+      expect(response["validation_required"]).to eq(true)
+    end
 
-  it 'initiates a card charge' do
-    charge_card = Card.new(rave)
-    response = charge_card.initiate_charge(payload)
-    expect(response["validation_required"]).to eq(true)
+    it 'should successfully charge card with suggested auth AVS' do
+      charge_card = Card.new(rave)
+      response = charge_card.initiate_charge(avs_payload)
+      expect(response["authurl"].nil?).to eq(false)
+    end
+
+    it 'should return chargeResponseCode 00 after successfully validating with flwRef and OTP' do
+      charge_card = Card.new(rave)
+      response = charge_card.initiate_charge(pin_payload)
+      response = charge_card.validate_charge(response["flwRef"], "12345")
+      expect(response["chargeResponseCode"]).to eq("00")
+    end
+
+    it 'should return chargecode 00 after successfully verifying a card transaction with txRef' do
+      charge_card = Card.new(rave)
+      response = charge_card.initiate_charge(pin_payload)
+      response = charge_card.validate_charge(response["flwRef"], "12345")
+      response = charge_card.verify_charge(response["txRef"])
+      expect(response["data"]["chargecode"]).to eq("00")
+    end
+
   end
 
   # it "should raise RaveBadKeyError" do
