@@ -1,9 +1,5 @@
 # require "bundler/setup"
 require "rave_ruby"
-require_relative "../lib/rave_ruby/rave_objects/card"
-require_relative "../lib/rave_ruby/rave_objects/account"
-require_relative "../lib/rave_ruby/rave_objects/list_banks"
-
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

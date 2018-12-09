@@ -1,4 +1,5 @@
 require 'spec_helper'
+require "rave_ruby/rave_objects/list_banks"
 
 test_public_key = "FLWPUBK-92e93a5c487ad64939327052e113c813-X"
 test_secret_key = "FLWSECK-61037cfe3cfc53b03e339ee201fa98f5-X"
