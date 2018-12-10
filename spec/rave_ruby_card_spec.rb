@@ -1,8 +1,9 @@
 require 'spec_helper'
 require "rave_ruby/rave_objects/card"
 
-test_public_key = "FLWPUBK-92e93a5c487ad64939327052e113c813-X"
-test_secret_key = "FLWSECK-61037cfe3cfc53b03e339ee201fa98f5-X"
+
+test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
+test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 
 payload = {
   "cardno" => "5438898014560229",
@@ -76,31 +77,31 @@ RSpec.describe Card do
     end
   
     it 'should check if authentication is required after charging a card' do
-      response = charge_card.initiate_charge(payload)
-      expect(response["suggested_auth"].nil?).to eq(false)
+      first_payload_response = charge_card.initiate_charge(payload)
+      expect(first_payload_response["suggested_auth"].nil?).to eq(false)
     end
 
     it 'should successfully charge card with suggested auth PIN' do
-      response = charge_card.initiate_charge(pin_payload)
-      expect(response["validation_required"]).to eq(true)
+      second_payload_response = charge_card.initiate_charge(pin_payload)
+      expect(second_payload_response["validation_required"]).to eq(true)
     end
 
     it 'should successfully charge card with suggested auth AVS' do
-      response = charge_card.initiate_charge(avs_payload)
-      expect(response["authurl"].nil?).to eq(false)
+      avs_payload_response = charge_card.initiate_charge(avs_payload)
+      expect(avs_payload_response["authurl"].nil?).to eq(false)
     end
 
     it 'should return chargeResponseCode 00 after successfully validating with flwRef and OTP' do
-      response = charge_card.initiate_charge(pin_payload)
-      response = charge_card.validate_charge(response["flwRef"], "12345")
-      expect(response["chargeResponseCode"]).to eq("00")
+      card_initiate_response = charge_card.initiate_charge(pin_payload)
+      card_validate_response = charge_card.validate_charge(card_initiate_response["flwRef"], "12345")
+      expect(card_validate_response["chargeResponseCode"]).to eq("00")
     end
 
     it 'should return chargecode 00 after successfully verifying a card transaction with txRef' do
-      response = charge_card.initiate_charge(pin_payload)
-      response = charge_card.validate_charge(response["flwRef"], "12345")
-      response = charge_card.verify_charge(response["txRef"])
-      expect(response["data"]["chargecode"]).to eq("00")
+      card_initiate_response = charge_card.initiate_charge(pin_payload)
+      card_validate_response = charge_card.validate_charge(card_initiate_response["flwRef"], "12345")
+      card_verify_response = charge_card.verify_charge(card_validate_response["txRef"])
+      expect(card_verify_response["data"]["chargecode"]).to eq("00")
     end
 
   end

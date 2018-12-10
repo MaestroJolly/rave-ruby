@@ -1,8 +1,8 @@
 require 'spec_helper'
 require "rave_ruby/rave_objects/mpesa"
 
-test_public_key = "FLWPUBK-92e93a5c487ad64939327052e113c813-X"
-test_secret_key = "FLWSECK-61037cfe3cfc53b03e339ee201fa98f5-X"
+test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
+test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 
 payload = {
   "amount" => "100",
@@ -23,16 +23,15 @@ RSpec.describe Mpesa do
     end
   
     it 'should check if mpesa transaction is successful initiated and validation is required' do
-      response = charge_mpesa.initiate_charge(payload)
-      expect(response["error"]).to eq(false)
-      expect(response["validation_required"]).to eq(true)
+      initiate_mpesa_response = charge_mpesa.initiate_charge(payload)
+      expect(initiate_mpesa_response["error"]).to eq(false)
+      expect(initiate_mpesa_response["validation_required"]).to eq(true)
     end
 
     it 'should return chargecode 00 after successfully verifying a mpesa transaction with txRef' do
-      response = charge_mpesa.initiate_charge(payload)
-      response = charge_mpesa.verify_charge(response["txRef"])
-      print response["transaction_complete"]
-      expect(response["data"]["chargecode"]).to eq("00")
+      initiate_mpesa_response = charge_mpesa.initiate_charge(payload)
+      verify_mpesa_response = charge_mpesa.verify_charge(initiate_mpesa_response["txRef"])
+      expect(verify_mpesa_response["data"]["chargecode"]).to eq("00")
     end
 
   end

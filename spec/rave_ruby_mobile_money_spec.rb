@@ -1,8 +1,9 @@
 require 'spec_helper'
 require "rave_ruby/rave_objects/mobile_money"
 
-test_public_key = "FLWPUBK-92e93a5c487ad64939327052e113c813-X"
-test_secret_key = "FLWSECK-61037cfe3cfc53b03e339ee201fa98f5-X"
+
+test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
+test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 
 payload = {
   "amount" => "50",
@@ -24,15 +25,15 @@ RSpec.describe MobileMoney do
     end
   
     it 'should check if mobile money transaction is successful initiated and validation is required' do
-      response = charge_mobile_money.initiate_charge(payload)
-      expect(response["error"]).to eq(false)
-      expect(response["validation_required"]).to eq(true)
+      initiate_mobile_money_response = charge_mobile_money.initiate_charge(payload)
+      expect(initiate_mobile_money_response["error"]).to eq(false)
+      expect(initiate_mobile_money_response["validation_required"]).to eq(true)
     end
 
     it 'should return chargecode 00 after successfully verifying a mobile money transaction with txRef' do
-      response = charge_mobile_money.initiate_charge(payload)
-      response = charge_mobile_money.verify_charge(response["txRef"])
-      expect(response["data"]["chargecode"]).to eq("00")
+      initiate_mobile_money_response = charge_mobile_money.initiate_charge(payload)
+      verify_mobile_money_response = charge_mobile_money.verify_charge(initiate_mobile_money_response["txRef"])
+      expect(verify_mobile_money_response["data"]["chargecode"]).to eq("00")
     end
 
   end

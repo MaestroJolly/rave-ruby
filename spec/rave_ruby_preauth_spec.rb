@@ -1,8 +1,9 @@
 require 'spec_helper'
 require "rave_ruby/rave_objects/preauth"
 
-test_public_key = "FLWPUBK-92e93a5c487ad64939327052e113c813-X"
-test_secret_key = "FLWSECK-61037cfe3cfc53b03e339ee201fa98f5-X"
+
+test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
+test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 
 payload = {
     "token" => "flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k",
@@ -26,35 +27,35 @@ RSpec.describe Preauth do
     end
   
     it 'should return error equals to false pending capture' do
-        response = preauth.initiate_charge(payload)
-        expect(response["error"]).to eq(false)
+        preauth_initiate_response = preauth.initiate_charge(payload)
+        expect(preauth_initiate_response["error"]).to eq(false)
     end
 
     it 'should return chargeResponseCode 00 after successfully capturing the charge' do
-        response = preauth.initiate_charge(payload)
-        response = preauth.capture(response["flwRef"], "30")
-        expect(response["chargeResponseCode"]).to eq("00")
+        preauth_initiate_response = preauth.initiate_charge(payload)
+        preauth_capture_response = preauth.capture(preauth_initiate_response["flwRef"], "30")
+        expect(preauth_capture_response["chargeResponseCode"]).to eq("00")
     end
 
     it 'should return error equals false if preauth transaction is successfully refunded' do
-        response = preauth.initiate_charge(payload)
-        response = preauth.capture(response["flwRef"], "30")
-        response = preauth.refund(response["flwRef"])
-        expect(response["error"]).to eq(false)
+        preauth_initiate_response = preauth.initiate_charge(payload)
+        preauth_capture_response = preauth.capture(preauth_initiate_response["flwRef"], "30")
+        preauth_refund_response = preauth.refund(preauth_capture_response["flwRef"])
+        expect(preauth_refund_response["error"]).to eq(false)
     end
 
     it 'should return error equals false if preauth is successfully void' do
-        response = preauth.initiate_charge(payload)
-        response = preauth.capture(response["flwRef"], "30")
-        response = preauth.void(response["flwRef"])
-        expect(response["error"]).to eq(false)
+        preauth_initiate_response = preauth.initiate_charge(payload)
+        preauth_capture_response = preauth.capture(preauth_initiate_response["flwRef"], "30")
+        preauth_void_response = preauth.void(preauth_capture_response["flwRef"])
+        expect(preauth_void_response["error"]).to eq(false)
     end
 
     it 'should return charge code equals 00 if preauth successfully verified' do
-        response = preauth.initiate_charge(payload)
-        response = preauth.capture(response["flwRef"], "30")
-        response = preauth.verify_preauth(response["txRef"])
-        expect(response["data"]["chargecode"]).to eq("00")
+        preauth_initiate_response = preauth.initiate_charge(payload)
+        preauth_capture_response = preauth.capture(preauth_initiate_response["flwRef"], "30")
+        preauth_verify_response = preauth.verify_preauth(preauth_capture_response["txRef"])
+        expect(preauth_verify_response["data"]["chargecode"]).to eq("00")
     end
 
   end

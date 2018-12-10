@@ -1,8 +1,9 @@
 require 'spec_helper'
 require "rave_ruby/rave_objects/account"
 
-test_public_key = "FLWPUBK-92e93a5c487ad64939327052e113c813-X"
-test_secret_key = "FLWSECK-61037cfe3cfc53b03e339ee201fa98f5-X"
+
+test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
+test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 
 payload = {
   "accountbank" => "044",
@@ -37,16 +38,16 @@ RSpec.describe Account do
     end
 
     it 'should return chargeResponseCode 00 after successfully validating with flwRef and OTP' do
-      response = charge_account.initiate_charge(payload)
-      response = charge_account.validate_charge(response["flwRef"], "12345")
-      expect(response["chargeResponseCode"]).to eq("00")
+      account_initiate_response = charge_account.initiate_charge(payload)
+      account_validate_response = charge_account.validate_charge(account_initiate_response["flwRef"], "12345")
+      expect(account_validate_response["chargeResponseCode"]).to eq("00")
     end
 
     it 'should return chargecode 00 after successfully verifying a account transaction with txRef' do
-      response = charge_account.initiate_charge(payload)
-      response = charge_account.validate_charge(response["flwRef"], "12345")
-      response = charge_account.verify_charge(response["txRef"])
-      expect(response["data"]["chargecode"]).to eq("00")
+      account_initiate_response = charge_account.initiate_charge(payload)
+      account_validate_response = charge_account.validate_charge(account_initiate_response["flwRef"], "12345")
+      account_verify_response = charge_account.verify_charge(account_validate_response["txRef"])
+      expect(account_verify_response["data"]["chargecode"]).to eq("00")
     end
 
   end

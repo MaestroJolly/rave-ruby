@@ -1,8 +1,8 @@
 require 'spec_helper'
 require "rave_ruby/rave_objects/transfer"
 
-test_public_key = "FLWPUBK-92e93a5c487ad64939327052e113c813-X"
-test_secret_key = "FLWSECK-61037cfe3cfc53b03e339ee201fa98f5-X"
+test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
+test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 
 payload = {
     "account_bank" => "044",
@@ -45,33 +45,33 @@ RSpec.describe Transfer do
     end
   
     it 'should check if single transfer is successful' do
-      response = transfer.initiate_transfer(payload)
-      expect(response["error"]).to eq(false)
+      initiate_single_transfer_response = transfer.initiate_transfer(payload)
+      expect(initiate_single_transfer_response["error"]).to eq(false)
     end
 
     it 'should check if bulk transfer is successful' do
-        response = transfer.bulk_transfer(bulk_payload)
-        expect(response["error"]).to eq(false)
+        initiate_bulk_transfer_response = transfer.bulk_transfer(bulk_payload)
+        expect(initiate_bulk_transfer_response["error"]).to eq(false)
     end
 
     it 'should return error equal false if single fee is successfully fetched' do
-      response = transfer.get_fee("NGN")
-      expect(response["error"]).to eq(false)
+      get_fee_response = transfer.get_fee("NGN")
+      expect(get_fee_response["error"]).to eq(false)
     end
 
     it 'should return error equal false if balance of an account is successfully fetched' do
-        response = transfer.get_balance("NGN")
-        expect(response["error"]).to eq(false)
+        get_balance_response = transfer.get_balance("NGN")
+        expect(get_balance_response["error"]).to eq(false)
     end
 
     it 'should return error equal false if balance of an account is successfully fetched' do
-        response = transfer.fetch("Bulk transfer 2")
-        expect(response["error"]).to eq(false)
+        fetch_single_transfer_response = transfer.fetch("Bulk transfer 2")
+        expect(fetch_single_transfer_response["error"]).to eq(false)
     end
 
     it 'should return error equal false if all transfers are successfully fetched' do
-        response = transfer.fetch_all_transfers
-        expect(response["error"]).to eq(false)
+        fetch_all_transfer_response = transfer.fetch_all_transfers
+        expect(fetch_all_transfer_response["error"]).to eq(false)
     end
 
   end
