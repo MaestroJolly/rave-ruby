@@ -1,8 +1,8 @@
 require 'spec_helper'
 require "rave_ruby/rave_objects/transfer"
 
-test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
-test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
+# test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
+# test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 
 payload = {
     "account_bank" => "044",
@@ -75,10 +75,5 @@ RSpec.describe Transfer do
     end
 
   end
-
-  # it "should raise RaveBadKeyError" do
-  #   rave = RaveRuby.new(test_public_key, test_secret_key)
-  #   expect(rave.public_key[0..7]).to eq("FLWPUBK-")
-  # end
   
 end

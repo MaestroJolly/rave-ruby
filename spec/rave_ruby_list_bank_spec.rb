@@ -2,8 +2,8 @@ require 'spec_helper'
 require "rave_ruby/rave_objects/list_banks"
 
 
-test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
-test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
+# test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
+# test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 
 RSpec.describe ListBanks do
 

@@ -2,8 +2,8 @@ require 'spec_helper'
 require "rave_ruby/rave_objects/preauth"
 
 
-test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
-test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
+# test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
+# test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 
 payload = {
     "token" => "flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k",
@@ -59,10 +59,5 @@ RSpec.describe Preauth do
     end
 
   end
-
-  # it "should raise RaveBadKeyError" do
-  #   rave = RaveRuby.new(test_public_key, test_secret_key)
-  #   expect(rave.public_key[0..7]).to eq("FLWPUBK-")
-  # end
   
 end
