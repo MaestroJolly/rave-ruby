@@ -28,8 +28,11 @@ RSpec.describe PaymentPlan do
     end
 
     it 'should raise Error if payment plan payload is incomplete' do
-        incomplete_payload_response = payment_plan.create_payment_plan(incomplete_payload)
-      expect(incomplete_payload_response).to raise_error(IncompleteParameterError)
+        begin
+          incomplete_payload_response = payment_plan.create_payment_plan(incomplete_payload)
+        rescue  => e
+          expect(e.instance_of? IncompleteParameterError).to eq true
+        end
     end
   
     it 'should check if payment plan is successfully created' do
@@ -44,19 +47,16 @@ RSpec.describe PaymentPlan do
 
     it 'should check if a single payment plan is successfully returned' do
         fetch_payment_plan_response = payment_plan.fetch_payment_plan("1125", "Test Plan")
-        print fetch_payment_plan_response
       expect(fetch_payment_plan_response["error"]).to eq(false)
     end
 
     it 'should check if a payment plan is successfully edited' do
         edit_payment_plan_response = payment_plan.edit_payment_plan("1125", {"name" => "Jack's Plan", "status" => "active"})
-        print edit_payment_plan_response
       expect(edit_payment_plan_response["error"]).to eq(false)
     end
 
     it 'should check if a payment plan is successfully cancelled' do
         cancel_payment_plan_response = payment_plan.cancel_payment_plan("1125")
-        print cancel_payment_plan_response
       expect(cancel_payment_plan_response["error"]).to eq(false)
     end
 
