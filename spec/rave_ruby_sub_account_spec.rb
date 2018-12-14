@@ -1,6 +1,7 @@
 require 'spec_helper'
 require "rave_ruby/rave_objects/sub_account"
 
+
 # test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
 # test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 
@@ -41,7 +42,7 @@ RSpec.describe SubAccount do
 
     it 'should raise Error if sub account payload is incomplete' do
         begin
-          incomplete_payload_response = sub_account.create_subaccount(incomplete_payload)
+          incomplete_payload_response = subaccount.create_subaccount(incomplete_payload)
         rescue  => e
           expect(e.instance_of? IncompleteParameterError).to eq true
         end
