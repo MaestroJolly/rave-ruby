@@ -111,7 +111,7 @@ It returns this response in ruby hash. A sample response:
 }
 
 ```
-A RaveServerError is raised if there's an error with the charge.
+A `RaveServerError` is raised if there's an error with the charge.
 
 #### Here's a sample error response if an exception is raised:
 
@@ -216,8 +216,8 @@ payload = {
     "amount" => "100", 
     "email" => "mijux@xcodes.net",
     "phonenumber" => "08134836828",
-    "firstname" => "ifunanya",
-    "lastname" => "Ikemma",
+    "firstname" => "Maestro",
+    "lastname" => "Jolly",
     "IP" => "355426087298442",
     "redirect_url" => "https://rave-webhook.herokuapp.com/receivepayment",
     "device_fingerprint" => "69e6b7f0b72037aa8428b70fbe03986c"
