@@ -231,7 +231,7 @@ print response
 # perform validation if it is required
 
 if response["validation_required"]
-    response = charge_account.validate_charge(response["flwRef"], "123")
+    response = charge_account.validate_charge(response["flwRef"], "12345")
     print response
 end
 
