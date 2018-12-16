@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 # test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
 # test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 

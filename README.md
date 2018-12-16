@@ -30,7 +30,7 @@ Or install it yourself as:
 
 To use [Rave](https://ravesandbox.flutterwave.com), you need to instantiate the RaveRuby class with your [API](https://ravesandbox.flutterwave.com/dashboard/settings/apis) keys which are your public and secret keys. We recommend that you store your API keys in your environment variable named `RAVE_PUBLIC_KEY` and `RAVE_SECRET_KEY`. Instantiating your rave object after adding your API keys in your environment is as illustrated below:
 
-```
+```ruby
 rave = RaveRuby.new
 ```
 This throws a `RaveBadKeyError` if no key is found in the environment variable or invalid public or secret key is found.
@@ -39,7 +39,7 @@ This throws a `RaveBadKeyError` if no key is found in the environment variable o
 
 You can instantiate your rave object by setting your public and secret keys by passing them as an argument of the `RaveRuby` class just as displayed below: 
 
-```
+```ruby
 rave = RaveRuby.new("YOUR_RAVE_SANDBOX_PUBLIC_KEY", "YOUR_RAVE_SANDBOX_SECRET_KEY")
 ```
 
@@ -49,7 +49,7 @@ rave = RaveRuby.new("YOUR_RAVE_SANDBOX_PUBLIC_KEY", "YOUR_RAVE_SANDBOX_SECRET_KE
 
 Simply use it as displayed below:
 
-```
+```ruby
 rave = RaveRuby.new("YOUR_RAVE_LIVE_PUBLIC_KEY", "YOUR_RAVE_LIVE_SECRET_KEY", true)
 ```
 
@@ -98,14 +98,14 @@ You can also add your custom transaction reference `(txRef)`, if not, one would 
 
 #### Here's a sample account charge call:
 
-``` 
+```ruby
 response = charge_account.initiate_charge(payload)
 ```
 #### returns:
 
 It returns this response in ruby hash. A sample response:
 
-```
+```ruby
 {
     "error"=>false, "status"=>"success", "validation_required"=>true, "message"=>"V-COMP", "suggested_auth"=>nil, "txRef"=>"MC-2232eed54ca72f8ae2125f49020fb592", "flwRef"=>"ACHG-1544908923260", "chargeResponseCode"=>"02", "chargeResponseMessage"=>"Pending OTP validation", "amount"=>100, "currency"=>"NGN", "validateInstruction"=>"Please dial *901*4*1# to get your OTP. Enter the OTP gotten in the field below", "paymentType"=>"account", "authModelUsed"=>"AUTH", "authurl"=>"NO-URL"
 }
@@ -115,7 +115,7 @@ A `RaveServerError` is raised if there's an error with the charge.
 
 #### Here's a sample error response if an exception is raised:
 
-```
+```ruby
 {
     "status":"error","message":"Sorry that account number is invalid. Please check and try again","data":{"code":"FLW_ERR","message":"Sorry that account number is invalid. Please check and try again","err_tx":{"id":360210,"flwRef":"ACHG-1544910130710","chargeResponseCode":"RR","chargeResponseMessage":"Sorry that account number is invalid. Please check and try again","status":"failed","merchantbearsfee":1,"appfee":"1.4","merchantfee":"0","charged_amount":"100.00"
 }}}
@@ -128,7 +128,7 @@ After a successful charge, most times you will be asked to verify with OTP. To c
 
 In the case that an `authUrl` is returned from your charge call, you may skip the validation step and simply pass your authurl to the end-user as displayed below:
 
-```
+```ruby
 authurl = response['authurl']
 ```
 
@@ -136,7 +136,7 @@ If validation is required by OTP, you need to pass the `flwRef` from the respons
 
 A sample validate_charge call is:
 
-```
+```ruby
 response = charge_account.validate_charge(response["flwRef"], "12345")
 ```
 
@@ -144,7 +144,7 @@ response = charge_account.validate_charge(response["flwRef"], "12345")
 
 It returns this response in ruby hash with the `txRef` and `flwRef` amongst its successful response:
 
-```
+```ruby
 {
     "error"=>false, "status"=>"success", "message"=>"Charge Complete", "txRef"=>"MC-c0c707a798de82f34b937e6126844d6c", "flwRef"=>"ACHG-1544963949493", "amount"=>100, "currency"=>"NGN", "chargeResponseCode"=>"00", "chargeResponseMessage"=>"Pending OTP validation"
 }
@@ -152,7 +152,7 @@ It returns this response in ruby hash with the `txRef` and `flwRef` amongst its 
 
 If an error occurs during OTP validation, you will receive a response similiar to this:
 
-```
+```ruby
 {
     "error"=>true, "status"=>"success", "message"=>"Charge Complete", "txRef"=>"MC-4cd9b2e4a9a104f92273ce194993ab50", "flwRef"=>"ACHG-1544969082006", "amount"=>100, "currency"=>"NGN", "chargeResponseCode"=>"02", "chargeResponseMessage"=>"Pending OTP validation"
 }
@@ -161,7 +161,7 @@ With `chargeResponseCode` still equals to `02` which means it didn't validate su
 
 Otherwise if validation is successful using OTP, you will receive a response similar to this:
 
-```
+```ruby
 {
     "error"=>false, "status"=>"success", "message"=>"Charge Complete", "txRef"=>"MC-c0c707a798de82f34b937e6126844d6c", "flwRef"=>"ACHG-1544963949493", "amount"=>100, "currency"=>"NGN", "chargeResponseCode"=>"00", "chargeResponseMessage"=>"Pending OTP validation"
 }
@@ -175,7 +175,7 @@ You can call the `verify_charge` function to check if your transaction was compl
 
 A sample verify_charge call:
 
-```
+```ruby
 response = charge_account.verify_charge(response["txRef"])
 ```
 
@@ -185,7 +185,7 @@ It returns this response in ruby hash with the `txRef`, `flwRef` and `transactio
 
 Full sample response returned if a transaction is successfully verified:
 
-```
+```ruby
 {
     "error"=>false, "transaction_complete"=>true, "data"=>{"txid"=>360744, "txref"=>"MC-c0c707a798de82f34b937e6126844d6c", "flwref"=>"ACHG-1544963949493", "devicefingerprint"=>"69e6b7f0b72037aa8428b70fbe03986c", "cycle"=>"one-time", "amount"=>100, "currency"=>"NGN", "chargedamount"=>100, "appfee"=>1.4, "merchantfee"=>0, "merchantbearsfee"=>1, "chargecode"=>"00", "chargemessage"=>"Pending OTP validation", "authmodel"=>"AUTH", "ip"=>"::ffff:10.11.193.41", "narration"=>"Simply Recharge", "status"=>"successful",
     "vbvcode"=>"N/A", "vbvmessage"=>"N/A", "authurl"=>"NO-URL", "acctcode"=>"00", "acctmessage"=>"Approved Or Completed Successfully", "paymenttype"=>"account", "paymentid"=>"90", "fraudstatus"=>"ok", "chargetype"=>"normal", "createdday"=>0, "createddayname"=>"SUNDAY", "createdweek"=>50, "createdmonth"=>11, "createdmonthname"=>"DECEMBER", "createdquarter"=>4, "createdyear"=>2018, "createdyearisleap"=>false, "createddayispublicholiday"=>0, "createdhour"=>12, "createdminute"=>39, "createdpmam"=>"pm", "created"=>"2018-12-16T12:39:08.000Z", "customerid"=>64794, "custphone"=>"08134836828", "custnetworkprovider"=>"MTN", "custname"=>"ifunanya Ikemma", "custemail"=>"mijux@xcodes.net", "custemailprovider"=>"COMPANY EMAIL", "custcreated"=>"2018-11-26T11:35:24.000Z", "accountid"=>6076, "acctbusinessname"=>"Simply Recharge", "acctcontactperson"=>"Jolaoso Yusuf", "acctcountry"=>"NG", "acctbearsfeeattransactiontime"=>1, "acctparent"=>1, "acctvpcmerchant"=>"N/A", "acctalias"=>nil, "acctisliveapproved"=>0, "orderref"=>"URF_1544963948269_113435", "paymentplan"=>nil, "paymentpage"=>nil, "raveref"=>"RV31544963947776E1DB61E313", "amountsettledforthistransaction"=>98.6, "account"=>{"id"=>90, "account_number"=>"0690000033", "account_bank"=>"044", "first_name"=>"NO-NAME", "last_name"=>"NO-LNAME", "account_is_blacklisted"=>0, "createdAt"=>"2017-04-26T12:54:22.000Z", "updatedAt"=>"2018-12-16T12:39:23.000Z", "deletedAt"=>nil, "account_token"=>{"token"=>"flw-t03a483b4eecf61cda-k3n-mock"}}, "meta"=>[]}
@@ -197,7 +197,7 @@ If a transaction couldn't be verified successfully, `error` and `transaction_com
 
 #### Full Account Transaction Flow:
 
-```
+```ruby
 require_relative './lib/rave_ruby'
 
 # This is a rave object which is expecting public and secret keys

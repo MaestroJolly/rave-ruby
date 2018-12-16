@@ -2,6 +2,7 @@ require 'spec_helper'
 require "rave_ruby/rave_objects/mpesa"
 
 
+
 # test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
 # test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 
