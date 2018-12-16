@@ -202,7 +202,7 @@ require_relative './lib/rave_ruby'
 
 # This is a rave object which is expecting public and secret keys
 
-# rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
+rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
 
 
 # This is used to perform card charge
