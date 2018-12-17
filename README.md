@@ -56,10 +56,10 @@ rave = RaveRuby.new("YOUR_RAVE_LIVE_PUBLIC_KEY", "YOUR_RAVE_LIVE_SECRET_KEY", tr
 ## Rave Objects
 
 - [Account.new(rave)](#account.new(rave))
-- [Card.new(rave)](#card.new())
+- [Card.new(rave)](#card.new(rave))
+- [Preauth.new(rave)](#preauth.new(rave))
 - [MobileMoney.new(rave)](#mobilemoney.new(rave))
 - [Mpesa.new(rave)](mpesa.new(rave))
-- [Preauth.new(rave)](#preauth.new(rave))
 - [SubAccount.new(rave)](#subaccount.(rave))
 - [PaymentPlan.new(rave)](#paymentplan.new(rave))
 - [Subscription.new(rave)](#subscription.new(rave))
@@ -74,9 +74,9 @@ To perform account transactions, instantiate the account object and pass rave ob
 
 Its functions includes:
 
-- `initiate_charge`
-- `validate_charge`
-- `verify_charge`
+- `.initiate_charge`
+- `.validate_charge`
+- `.verify_charge`
 
 #### `.initiate_charge(payload)`
 
@@ -179,7 +179,7 @@ A sample verify_charge call:
 response = charge_account.verify_charge(response["txRef"])
 ```
 
-#### returns:
+### returns:
 
 It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
 
@@ -241,7 +241,285 @@ response = charge_account.verify_charge(response["txRef"])
 print response
 ```
 
+### `Card.new(rave)`
 
+To perform card transactions, instantiate the card object and pass rave object as its argument.
+
+Its functions includes:
+
+- `.initiate_charge`
+- `.get_auth_type`
+- `.update_payload`
+- `.validate_charge`
+- `.verify_charge`
+
+#### `.initiate_charge(payload)`
+
+This function is called to initiate card transaction. The payload should be a ruby hash with card details. Its parameters should include the following:
+
+- `cardno`,
+
+- `cvv`,
+
+- `expirymonth`,
+
+- `expiryyear`,
+
+- `amount`,
+
+- `email`,
+
+- `phonenumber`,
+
+- `firstname`,
+
+- `lastname`,
+
+- `IP`
+
+You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
+
+#### Here's a sample card charge call:
+
+```ruby
+response = charge_card.initiate_charge(payload)
+```
+You need to make this initial charge call to get the suggested_auth for the transaction.
+
+#### returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "status"=>"success", "validation_required"=>true, "message"=>"AUTH_SUGGESTION", "suggested_auth"=>"PIN", "txRef"=>nil, "flwRef"=>nil, "chargeResponseCode"=>nil, "chargeResponseMessage"=>nil, "amount"=>nil, "currency"=>nil, "validateInstruction"=>nil, "paymentType"=>nil, "authModelUsed"=>nil, "authurl"=>nil
+}
+
+```
+
+A `RaveServerError` is raised if there's an error with the card charge.
+
+#### Here's a sample error response if an exception is raised:
+
+```ruby
+{
+    "status":"error","message":"Card number is invalid","data":{"code":"ERR","message":"Card number is invalid"
+    }
+}
+
+```
+
+#### `.update_payload(suggested_auth, payload, pin or address)`
+
+You need to update the payload with `pin` or `address` parameters depending on the `suggested_auth` returned from the initial charge call i.e `suggested_auth = response["suggested_auth"]` and passing it as a parameter of the `.get_auth_type(suggested_auth)` method.
+
+If the `suggested_auth` returned is `pin`, update the payload with this method `charge_card.update_payload(suggested_auth, payload, pin: "CUSTOMER CARD PIN")`. 
+
+If the `suggested_auth` returned is `address`, update the payload with this method `charge_card.update_payload(suggested_auth, payload, address:{"A RUBY HASH OF CUSTOMER'S BILLING ADDRESS"})`. 
+
+This is what the ruby hash billing address consists:
+
+- `billingzip`,
+
+- `billingcity`,
+
+- `billingaddress`,
+
+- `billingstate`,
+
+- `billingcountry`
+
+After updating the payload, you will need to make the `.initiate_charge` call again with the updated payload, as displayed below:
+
+```ruby
+response = charge_card.initiate_charge(updated_payload)
+
+```
+
+This is a sample response returned after updating payload with suggested_auth `pin`:
+
+```ruby
+{
+    "error"=>false, "status"=>"success", "validation_required"=>true, "message"=>"V-COMP", "suggested_auth"=>nil, "txRef"=>"MC-d8c02b9bdf21d02aa7ab276cda3177ae", "flwRef"=>"FLW-MOCK-68d8095eab1abdb69805be0a55d84630", "chargeResponseCode"=>"02", "chargeResponseMessage"=>"Please enter the OTP sent to your mobile number 080****** and email te**@rave**.com", "amount"=>10, "currency"=>"NGN", "validateInstruction"=>nil, "paymentType"=>"card", "authModelUsed"=>"PIN", "authurl"=>"N/A"
+}
+```
+
+#### `.validate_charge(response['flwRef'], "OTP")`
+
+After a successful charge, most times you will be asked to verify with OTP. To check if this is required, check the validation_required key in the response of the charge call i.e `response["validation_required"]` is equal to `true`.
+
+In the case that an `authUrl` is returned from your charge call, you may skip the validation step and simply pass your authurl to the end-user as displayed below:
+
+```ruby
+authurl = response['authurl']
+```
+
+If validation is required by OTP, you need to pass the `flwRef` from the response of the charge call as well as the OTP.
+
+A sample validate_charge call is:
+
+```ruby
+response = charge_card.validate_charge(response["flwRef"], "12345")
+```
+
+#### returns:
+
+It returns this response in ruby hash with the `txRef` and `flwRef` amongst its successful response:
+
+```ruby
+{
+    "error"=>false, "status"=>"success", "message"=>"Charge Complete", "txRef"=>"MC-d8c02b9bdf21d02aa7ab276cda3177ae", "flwRef"=>"FLW-MOCK-68d8095eab1abdb69805be0a55d84630", "amount"=>10, "currency"=>"NGN", "chargeResponseCode"=>"00", "chargeResponseMessage"=>"Please enter the OTP sent to your mobile number 080****** and email te**@rave**.com"
+}
+```
+
+If an error occurs during OTP validation, you will receive a response similiar to this:
+
+```ruby
+{
+    "error"=>true, "status"=>"success", "message"=>"Charge Complete", "txRef"=>"MC-155418209b1cf2812da3ceb57e541ef0", "flwRef"=>"FLW-MOCK-35167122c73ccdd8ee796b71042af101", "amount"=>100, "currency"=>"NGN", "chargeResponseCode"=>"02", "chargeResponseMessage"=>"Pending OTP validation"
+}
+```
+With `chargeResponseCode` still equals to `02` which means it didn't validate successfully and is till pending validation.
+
+Otherwise if validation is successful using OTP, you will receive a response similar to this:
+
+```ruby
+{
+    "error"=>false, "status"=>"success", "message"=>"Charge Complete", "txRef"=>"MC-eac8888322fa44343d1a3ed7c8025fde", "flwRef"=>"FLW-MOCK-01cb1be7b183cfdec0d5225316647378", "amount"=>10, "currency"=>"NGN", "chargeResponseCode"=>"00", "chargeResponseMessage"=>"Please enter the OTP sent to your mobile number 080****** and email te**@rave**.com"
+}
+```
+With `chargeResponseCode` equals to `00` which means it validated successfully.
+
+#### `.verify_charge(response["txRef"])`
+
+You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` or `validate_charge` call.
+
+A sample verify_charge call:
+
+```ruby
+response = charge_card.verify_charge(response["txRef"])
+```
+
+### returns:
+
+It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
+
+Full sample response returned if a transaction is successfully verified:
+
+```ruby
+{
+    "error"=>false, "transaction_complete"=>true, "data"=>{"txid"=>362093, "txref"=>"MC-eac8888322fa44343d1a3ed7c8025fde", "flwref"=>"FLW-MOCK-01cb1be7b183cfdec0d5225316647378", "devicefingerprint"=>"69e6b7f0b72037aa8428b70fbe03986c", "cycle"=>"one-time", "amount"=>10, "currency"=>"NGN", "chargedamount"=>10, "appfee"=>0.14, "merchantfee"=>0, "merchantbearsfee"=>1, "chargecode"=>"00", "chargemessage"=>"Please enter the OTP sent to your mobile number 080****** and email te**@rave**.com", "authmodel"=>"PIN", "ip"=>"::ffff:10.69.80.227", "narration"=>"CARD Transaction ", "status"=>"successful", "vbvcode"=>"00", "vbvmessage"=>"successful", "authurl"=>"N/A", "acctcode"=>nil, "acctmessage"=>nil, "paymenttype"=>"card", "paymentid"=>"861", "fraudstatus"=>"ok", "chargetype"=>"normal", "createdday"=>1, "createddayname"=>"MONDAY", "createdweek"=>51, "createdmonth"=>11, "createdmonthname"=>"DECEMBER", "createdquarter"=>4, "createdyear"=>2018, "createdyearisleap"=>false, "createddayispublicholiday"=>0, "createdhour"=>17, "createdminute"=>4, "createdpmam"=>"pm", "created"=>"2018-12-17T17:04:45.000Z", "customerid"=>51655, "custphone"=>"0902620185", "custnetworkprovider"=>"AIRTEL", "custname"=>"temi desola", "custemail"=>"user@gmail.com", "custemailprovider"=>"GMAIL", "custcreated"=>"2018-09-24T07:59:14.000Z", "accountid"=>6076, "acctbusinessname"=>"Simply Recharge", "acctcontactperson"=>"Jolaoso Yusuf", "acctcountry"=>"NG", "acctbearsfeeattransactiontime"=>1, "acctparent"=>1, "acctvpcmerchant"=>"N/A", "acctalias"=>nil, "acctisliveapproved"=>0, "orderref"=>"URF_1545066285779_8747935", "paymentplan"=>nil, "paymentpage"=>nil, "raveref"=>"RV3154506628468675C4CD519A", "amountsettledforthistransaction"=>9.86, "card"=>{"expirymonth"=>"09", "expiryyear"=>"19", "cardBIN"=>"543889", "last4digits"=>"0229", "brand"=>"MASHREQ BANK CREDITSTANDARD", "card_tokens"=>[{"embedtoken"=>"flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k", "shortcode"=>"671c0", "expiry"=>"9999999999999"}], "type"=>"MASTERCARD", "life_time_token"=>"flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k"}, "meta"=>[{"id"=>1257583, "metaname"=>"flightID", "metavalue"=>"123949494DC", "createdAt"=>"2018-12-17T17:04:46.000Z", "updatedAt"=>"2018-12-17T17:04:46.000Z", "deletedAt"=>nil, "getpaidTransactionId"=>362093}]}
+}
+```
+
+If a transaction couldn't be verified successfully, `error` and `transaction_complete` would come as `false` and `true` respectively.
+
+#### Full Card Transaction Flow:
+
+```ruby
+
+require_relative './lib/rave_ruby'
+
+# This is a rave object which is expecting public and secret keys
+rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
+
+# This is used to perform card charge
+
+payload = {
+    "cardno" => "5438898014560229",
+    "cvv" => "890",
+    "expirymonth" => "09",
+    "expiryyear" => "19",
+    "currency" => "NGN",
+    "country" => "NG",
+    "amount" => "10",
+    "email" => "user@gmail.com",
+    "phonenumber" => "0902620185",
+    "firstname" => "temi",
+    "lastname" => "desola",
+    "IP" => "355426087298442",
+    "meta" => [{"metaname": "flightID", "metavalue": "123949494DC"}],
+    "redirect_url" => "https://rave-webhook.herokuapp.com/receivepayment",
+    "device_fingerprint" => "69e6b7f0b72037aa8428b70fbe03986c"
+}
+
+charge_card = Card.new(rave)
+
+response = charge_card.initiate_charge(payload)
+
+print response
+
+# update payload with suggested auth
+if response["suggested_auth"]
+    suggested_auth = response["suggested_auth"]
+    auth_arg = charge_card.get_auth_type(suggested_auth)
+    if auth_arg == :pin
+        updated_payload = charge_card.update_payload(suggested_auth, payload, pin: "3310")
+    elsif auth_arg == :address
+        updated_payload = charge_card.update_payload(suggested_auth, payload, address:{"billingzip"=> "07205", "billingcity"=> "Hillside", "billingaddress"=> "470 Mundet PI", "billingstate"=> "NJ", "billingcountry"=> "US"})
+    end
+end
+
+#  perform the second charge after payload is updated with suggested auth
+response = charge_card.initiate_charge(updated_payload)
+print response
+
+# perform validation if it is required
+
+if response["validation_required"]
+    response = charge_card.validate_charge(response["flwRef"], "12345")
+    print response
+end
+
+# verify charge
+response = charge_card.verify_charge(response["txRef"])
+print response
+
+```
+
+`NOTE:` You can tokenize a card after charging the card for the first time for subsequent transactions done with the card without having to send the card details everytime a transaction is done. The card token can be gotten from the `.verify_charge` response, here's how to get the card token from our sample verify response:
+
+`response['card']['card_tokens']['embed_tokens']` which is equal to this: `flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k`
+
+### `Preauth.new(rave)`
+
+This is called to process a card transaction with a saved card token. The payload should be a ruby hash containing card information. It should have the following parameters:
+
+- `token`,
+
+- `country`,
+
+- `amount`,
+
+- `email`,
+
+- `firstname`,
+
+- `lastname`,
+
+- `IP`,
+
+- `txRef`,
+
+- `currency`
+
+`NOTE:` You need to use the same email used when charging the card for the first time to successfully charge the card.
+
+You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
+
+#### Here's a sample preauth charge call:
+
+```ruby
+response = preauth.initiate_charge(payload)
+```
+#### returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "status"=>"pending-capture", "message"=>"Charge success", "validation_required"=>false, "txRef"=>"MC-19b39c0d34d176317f23bc39de2c2382", "flwRef"=>"FLW-PREAUTH-M03K-e169ad32609b83076d4ea31a8412d6f0", "amount"=>1000, "currency"=>"NGN", "paymentType"=>"card"
+}
 
 
 ## Development
