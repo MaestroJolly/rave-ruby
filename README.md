@@ -521,6 +521,8 @@ It returns this response in ruby hash. A sample response:
     "error"=>false, "status"=>"pending-capture", "message"=>"Charge success", "validation_required"=>false, "txRef"=>"MC-19b39c0d34d176317f23bc39de2c2382", "flwRef"=>"FLW-PREAUTH-M03K-e169ad32609b83076d4ea31a8412d6f0", "amount"=>1000, "currency"=>"NGN", "paymentType"=>"card"
 }
 
+```
+
 
 ## Development
 
