@@ -26,7 +26,7 @@ class Preauth < PreauthBase
         if data.key?("token")
             data.merge!({"SECKEY" => secret_key})
             payload = data.to_json
-            response = post_request("#{base_url}#{BASE_ENDPOINTS::TOKENISED_CHARGE_ENDPOINT}", payload) 
+            response = post_request("#{base_url}#{BASE_ENDPOINTS::PREAUTH_CHARGE_ENDPOINT}", payload) 
             return handle_charge_response(response)
         else
             encrypt_data = Util.encrypt(hashed_secret_key, data)

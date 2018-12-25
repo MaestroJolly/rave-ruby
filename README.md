@@ -101,7 +101,7 @@ You can also add your custom transaction reference `(txRef)`, if not, one would 
 ```ruby
 response = charge_account.initiate_charge(payload)
 ```
-#### returns:
+#### which returns:
 
 It returns this response in ruby hash. A sample response:
 
@@ -122,7 +122,7 @@ A `RaveServerError` is raised if there's an error with the charge.
 
 ```
 
-#### `.validate_charge(response['flwRef'], "OTP")`
+#### `.validate_charge(flwRef, "OTP")`
 
 After a successful charge, most times you will be asked to verify with OTP. To check if this is required, check the validation_required key in the response of the charge call i.e `response["validation_required"]` is equal to `true`.
 
@@ -140,7 +140,7 @@ A sample validate_charge call is:
 response = charge_account.validate_charge(response["flwRef"], "12345")
 ```
 
-#### returns:
+#### which returns:
 
 It returns this response in ruby hash with the `txRef` and `flwRef` amongst its successful response:
 
@@ -169,7 +169,7 @@ Otherwise if validation is successful using OTP, you will receive a response sim
 
 With `chargeResponseCode` equals to `00` which means it validated successfully.
 
-#### `.verify_charge(response["txRef"])`
+#### `.verify_charge(txRef)`
 
 You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` or `validate_charge` call.
 
@@ -179,7 +179,7 @@ A sample verify_charge call:
 response = charge_account.verify_charge(response["txRef"])
 ```
 
-### returns:
+### which returns:
 
 It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
 
@@ -286,7 +286,7 @@ response = charge_card.initiate_charge(payload)
 ```
 You need to make this initial charge call to get the suggested_auth for the transaction.
 
-#### returns:
+#### which returns:
 
 It returns this response in ruby hash. A sample response:
 
@@ -344,7 +344,7 @@ This is a sample response returned after updating payload with suggested_auth `p
 }
 ```
 
-#### `.validate_charge(response['flwRef'], "OTP")`
+#### `.validate_charge(flwRef, "OTP")`
 
 After a successful charge, most times you will be asked to verify with OTP. To check if this is required, check the validation_required key in the response of the charge call i.e `response["validation_required"]` is equal to `true`.
 
@@ -362,7 +362,7 @@ A sample validate_charge call is:
 response = charge_card.validate_charge(response["flwRef"], "12345")
 ```
 
-#### returns:
+#### which returns:
 
 It returns this response in ruby hash with the `txRef` and `flwRef` amongst its successful response:
 
@@ -390,7 +390,7 @@ Otherwise if validation is successful using OTP, you will receive a response sim
 ```
 With `chargeResponseCode` equals to `00` which means it validated successfully.
 
-#### `.verify_charge(response["txRef"])`
+#### `.verify_charge(txRef)`
 
 You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` or `validate_charge` call.
 
@@ -400,7 +400,7 @@ A sample verify_charge call:
 response = charge_card.verify_charge(response["txRef"])
 ```
 
-### returns:
+### which returns:
 
 It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
 
@@ -479,11 +479,21 @@ print response
 
 `NOTE:` You can tokenize a card after charging the card for the first time for subsequent transactions done with the card without having to send the card details everytime a transaction is done. The card token can be gotten from the `.verify_charge` response, here's how to get the card token from our sample verify response:
 
-`response['card']['card_tokens']['embed_tokens']` which is equal to this: `flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k`
+`response['card']['card_tokens']['embed_tokens']` which is similar to this: `flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k`
 
 ### `Preauth.new(rave)`
 
-This is called to process a card transaction with a saved card token. The payload should be a ruby hash containing card information. It should have the following parameters:
+This is used to process a preauthorized card transaction.
+
+Its functions includes:
+
+- `.initiate_charge`
+- `.capture`
+- `.refund`
+- `.void`
+- `.verify_preauth`
+
+The payload should be a ruby hash containing card information. It should have the following parameters:
 
 - `token`,
 
@@ -512,14 +522,131 @@ You can also add your custom transaction reference `(txRef)`, if not, one would 
 ```ruby
 response = preauth.initiate_charge(payload)
 ```
-#### returns:
+#### which returns:
 
 It returns this response in ruby hash. A sample response:
 
 ```ruby
 {
-    "error"=>false, "status"=>"pending-capture", "message"=>"Charge success", "validation_required"=>false, "txRef"=>"MC-19b39c0d34d176317f23bc39de2c2382", "flwRef"=>"FLW-PREAUTH-M03K-e169ad32609b83076d4ea31a8412d6f0", "amount"=>1000, "currency"=>"NGN", "paymentType"=>"card"
+    "error"=>false, "status"=>"pending-capture", "message"=>"Charge success", "validation_required"=>false, "txRef"=>"MC-0df3e7e6cd58b226d4ba2a3d03dd200b", "flwRef"=>"FLW-PREAUTH-M03K-abdc01e69aa424b9e1ac44987ec21ec3", "amount"=>1000, "currency"=>"NGN", "paymentType"=>"card"
 }
+
+```
+
+#### `.capture(flwRef)`
+
+The capture method is called after the preauth card has been charged. It takes in the `flwRef` from the charge response and call optionally take in amount less than the original amount authorised on the card as displayed below.
+
+#### Here's a sample capture call:
+
+```ruby
+response = preauth.capture(response["flwRef"], "30")
+```
+
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "status"=>"successful", "message"=>"Capture complete", "validation_required"=>false, "txRef"=>"MC-0df3e7e6cd58b226d4ba2a3d03dd200b", "flwRef"=>"FLW-PREAUTH-M03K-abdc01e69aa424b9e1ac44987ec21ec3", "amount"=>30, "currency"=>"NGN", "chargeResponseCode"=>"00", "chargeResponseMessage"=>"Approved", "paymentType"=>"card"
+}
+
+```
+
+#### `.refund(flwRef)`
+
+This is called to perform a `refund` of a preauth transaction.
+
+#### Here's a sample refund call:
+
+```ruby
+response = preauth.refund(response["flwRef"])
+
+```
+
+#### `.void(flwRef)`
+
+This is called to `void` a preauth transaction.
+
+#### Here's a sample void call:
+
+```ruby
+response = preauth.void(response["flwRef"])
+
+```
+
+#### `.verify_preauth(txRef)`
+
+The verify_preauth method can be called after capture is successfully completed by passing the `txRef` from the `charge` or `capture` response as its argument as shown below.
+
+#### A sample verify_preauth call:
+
+```ruby
+response = preauth.verify_preauth(response["txRef"])
+
+```
+
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "transaction_complete"=>true, "data"=>{"txid"=>370365, "txref"=>"MC-0df3e7e6cd58b226d4ba2a3d03dd200b", "flwref"=>"FLW-PREAUTH-M03K-abdc01e69aa424b9e1ac44987ec21ec3", "devicefingerprint"=>"N/A", "cycle"=>"one-time", "amount"=>30, "currency"=>"NGN", "chargedamount"=>30.42, "appfee"=>0.42, "merchantfee"=>0, "merchantbearsfee"=>0, "chargecode"=>"00", "chargemessage"=>"Approved", "authmodel"=>"noauth", "ip"=>"190.233.222.1", "narration"=>"TOKEN CHARGE", "status"=>"successful", "vbvcode"=>"00", "vbvmessage"=>"Approved", "authurl"=>"N/A", "acctcode"=>"FLWPREAUTH-M03K-CP-1545740097601", "acctmessage"=>"CAPTURE
+REFERENCE", "paymenttype"=>"card", "paymentid"=>"861", "fraudstatus"=>"ok", "chargetype"=>"preauth", "createdday"=>2, "createddayname"=>"TUESDAY", "createdweek"=>52, "createdmonth"=>11, "createdmonthname"=>"DECEMBER", "createdquarter"=>4, "createdyear"=>2018, "createdyearisleap"=>false, "createddayispublicholiday"=>0, "createdhour"=>12, "createdminute"=>14, "createdpmam"=>"pm", "created"=>"2018-12-25T12:14:54.000Z", "customerid"=>51655, "custphone"=>"0902620185", "custnetworkprovider"=>"AIRTEL", "custname"=>"temi desola", "custemail"=>"user@gmail.com", "custemailprovider"=>"GMAIL", "custcreated"=>"2018-09-24T07:59:14.000Z", "accountid"=>6076, "acctbusinessname"=>"Simply Recharge", "acctcontactperson"=>"Jolaoso Yusuf", "acctcountry"=>"NG", "acctbearsfeeattransactiontime"=>1, "acctparent"=>1, "acctvpcmerchant"=>"N/A", "acctalias"=>nil, "acctisliveapproved"=>0, "orderref"=>nil, "paymentplan"=>nil, "paymentpage"=>nil, "raveref"=>nil, "amountsettledforthistransaction"=>30, "card"=>{"expirymonth"=>"09", "expiryyear"=>"19", "cardBIN"=>"543889", "last4digits"=>"0229", "brand"=>"MASHREQ BANK CREDITSTANDARD", "card_tokens"=>[{"embedtoken"=>"flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k", "shortcode"=>"671c0", "expiry"=>"9999999999999"}], "type"=>"MASTERCARD", "life_time_token"=>"flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k"}, "meta"=>[{"id"=>1259456, "metaname"=>"trxauthorizeid", "metavalue"=>"M03K-i0-8673be673b828e4b2863ef6d39d56cce", "createdAt"=>"2018-12-25T12:14:54.000Z", "updatedAt"=>"2018-12-25T12:14:54.000Z", "deletedAt"=>nil, "getpaidTransactionId"=>370365}, {"id"=>1259457, "metaname"=>"trxreference", "metavalue"=>"FLW-PREAUTH-M03K-abdc01e69aa424b9e1ac44987ec21ec3", "createdAt"=>"2018-12-25T12:14:54.000Z", "updatedAt"=>"2018-12-25T12:14:54.000Z", "deletedAt"=>nil, "getpaidTransactionId"=>370365}, {"id"=>1259458, "metaname"=>"old_amount", "metavalue"=>"1000", "createdAt"=>"2018-12-25T12:14:57.000Z", "updatedAt"=>"2018-12-25T12:14:57.000Z", "deletedAt"=>nil, "getpaidTransactionId"=>370365}, {"id"=>1259459, "metaname"=>"old_charged_amount", "metavalue"=>"1000", "createdAt"=>"2018-12-25T12:14:57.000Z", "updatedAt"=>"2018-12-25T12:14:57.000Z", "deletedAt"=>nil, "getpaidTransactionId"=>370365}, {"id"=>1259460, "metaname"=>"old_fee", "metavalue"=>"", "createdAt"=>"2018-12-25T12:14:57.000Z", "updatedAt"=>"2018-12-25T12:14:57.000Z", "deletedAt"=>nil, "getpaidTransactionId"=>370365}, {"id"=>1259461, "metaname"=>"old_merchant_fee",
+"metavalue"=>"0", "createdAt"=>"2018-12-25T12:14:57.000Z", "updatedAt"=>"2018-12-25T12:14:57.000Z", "deletedAt"=>nil, "getpaidTransactionId"=>370365}]}
+}
+
+```
+
+#### Full Preauth Transaction Flow:
+
+```ruby
+require_relative './lib/rave_ruby'
+
+
+# This is a rave object which is expecting public and secret keys
+rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
+
+
+# This is the payload for preauth charge
+
+payload = {
+    "token" => "flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k",
+    "country" => "NG",
+    "amount" => "1000",
+    "email" => "user@gmail.com",
+    "firstname" => "temi",
+    "lastname" => "Oyekole",
+    "IP" => "190.233.222.1",
+    "currency" => "NGN",
+}
+
+
+# Instantiate the preauth object
+preauth = Preauth.new(rave)
+
+# Perform a charge with the card token from the saved from the card charge
+response = preauth.initiate_charge(payload)
+print response
+
+# Perform capture 
+response = preauth.capture(response["flwRef"], "30")
+print response
+
+# Perform a refund
+# response = preauth.refund(response["flwRef"])
+# print response
+
+# Void transaction
+# response = preauth.void(response["flwRef"])
+# print response
+
+# Verify transaction
+response = preauth.verify_preauth(response["txRef"])
+print response
+
 
 ```
 
