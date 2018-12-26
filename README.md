@@ -55,18 +55,18 @@ rave = RaveRuby.new("YOUR_RAVE_LIVE_PUBLIC_KEY", "YOUR_RAVE_LIVE_SECRET_KEY", tr
 
 ## Rave Objects
 
-- [Account.new(rave)](#account.new(rave))
+- [Account.new(rave)](#accountnewrave)
 - [Card.new(rave)](#cardnewrave)
-- [Preauth.new(rave)](#preauth.new(rave))
-- [MobileMoney.new(rave)](#mobilemoney.new(rave))
-- [Mpesa.new(rave)](#mpesa.new(rave))
-- [SubAccount.new(rave)](#subaccount.(rave))
-- [PaymentPlan.new(rave)](#paymentplan.new(rave))
-- [Subscription.new(rave)](#subscription.new(rave))
-- [Transfer.new(rave)](#transfer.new(rave))
-- [UgandaMobileMoney.new(rave)](#ugandamobilemoney.new(rave))
-- [Ussd.new(rave)](#ussd.new(rave))
-- [ListBanks.new(rave)](#listbanks.new(rave))
+- [Preauth.new(rave)](#preauthnewrave)
+- [MobileMoney.new(rave)](#mobilemoneynewrave)
+- [Mpesa.new(rave)](#mpesanewrave)
+- [SubAccount.new(rave)](#subaccountrave)
+- [PaymentPlan.new(rave)](#paymentplannewrave)
+- [Subscription.new(rave)](#subscriptionnewrave)
+- [Transfer.new(rave)](#transfernewrave)
+- [UgandaMobileMoney.new(rave)](#ugandamobilemoneynewrave)
+- [Ussd.new(rave)](#ussdnewrave)
+- [ListBanks.new(rave)](#listbanksnewrave)
 
 ### `Account.new(rave)`
 
