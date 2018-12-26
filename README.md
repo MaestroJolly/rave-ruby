@@ -59,7 +59,7 @@ rave = RaveRuby.new("YOUR_RAVE_LIVE_PUBLIC_KEY", "YOUR_RAVE_LIVE_SECRET_KEY", tr
 - [Card.new(rave)](#card.new(rave))
 - [Preauth.new(rave)](#preauth.new(rave))
 - [MobileMoney.new(rave)](#mobilemoney.new(rave))
-- [Mpesa.new(rave)](mpesa.new(rave))
+- [Mpesa.new(rave)](#mpesa.new(rave))
 - [SubAccount.new(rave)](#subaccount.(rave))
 - [PaymentPlan.new(rave)](#paymentplan.new(rave))
 - [Subscription.new(rave)](#subscription.new(rave))
@@ -193,7 +193,7 @@ Full sample response returned if a transaction is successfully verified:
 
 ```
 
-If a transaction couldn't be verified successfully, `error` and `transaction_complete` would come as `false` and `true` respectively.
+If a transaction couldn't be verified successfully, `error` and `transaction_complete` would both come as `false`.
 
 #### Full Account Transaction Flow:
 
@@ -412,7 +412,7 @@ Full sample response returned if a transaction is successfully verified:
 }
 ```
 
-If a transaction couldn't be verified successfully, `error` and `transaction_complete` would come as `false` and `true` respectively.
+If a transaction couldn't be verified successfully, `error` and `transaction_complete` would both come as `false`.
 
 #### Full Card Transaction Flow:
 
@@ -649,6 +649,116 @@ print response
 
 
 ```
+
+
+### `MobileMoney.new(rave)`
+
+To perform ghana mobile money transactions, instantiate the mobile money object and pass rave object as its argument.
+
+Its functions includes:
+
+- `.initiate_charge`
+- `.verify_charge`
+
+#### `.initiate_charge(payload)`
+
+This function is called to initiate mobile money transaction. The payload should be a ruby hash with mobile money details. Its parameters should include the following:
+
+- `amount`,
+
+- `email`,
+
+- `phonenumber`,
+
+- `network`,
+
+- `IP`,
+
+- `redirect_url`
+
+You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
+
+#### Here's a sample mobile money charge call:
+
+```ruby
+response = charge_mobile_money.initiate_charge(payload)
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+
+{
+    "error"=>false, "status"=>"success-pending-validation", "validation_required"=>true, "txRef"=>"MC-83d9405416ff2a7312d8e3d5fceb3d52", "flwRef"=>"flwm3s4m0c1545818908919", "amount"=>50, "currency"=>"GHS", "validateInstruction"=>nil, "authModelUsed"=>"MOBILEMONEY", "paymentType"=>"mobilemoneygh"
+}
+
+```
+
+#### `.verify_charge(txRef)`
+
+You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` call.
+
+A sample verify_charge call:
+
+```ruby
+response = charge_mobile_money.verify_charge(response["txRef"])
+```
+
+### which returns:
+
+It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
+
+Full sample response returned if a transaction is successfully verified:
+
+```ruby
+
+{
+    "error"=>false, "transaction_complete"=>true, "data"=>{"txid"=>371101, "txref"=>"MC-1c2a66b7bb6e55c254cad2a61b0ea47b", "flwref"=>"flwm3s4m0c1545824547181", "devicefingerprint"=>"N/A", "cycle"=>"one-time", "amount"=>50, "currency"=>"GHS", "chargedamount"=>50, "appfee"=>0.7, "merchantfee"=>0, "merchantbearsfee"=>1, "chargecode"=>"00", "chargemessage"=>"Pending Payment Validation", "authmodel"=>"MOBILEMONEY",
+"ip"=>"::ffff:10.37.131.195", "narration"=>"Simply Recharge", "status"=>"successful", "vbvcode"=>"N/A", "vbvmessage"=>"N/A", "authurl"=>"NO-URL", "acctcode"=>"00", "acctmessage"=>"Approved", "paymenttype"=>"mobilemoneygh", "paymentid"=>"N/A", "fraudstatus"=>"ok", "chargetype"=>"normal", "createdday"=>3, "createddayname"=>"WEDNESDAY", "createdweek"=>52, "createdmonth"=>11, "createdmonthname"=>"DECEMBER", "createdquarter"=>4, "createdyear"=>2018, "createdyearisleap"=>false, "createddayispublicholiday"=>0, "createdhour"=>11, "createdminute"=>42, "createdpmam"=>"am", "created"=>"2018-12-26T11:42:26.000Z", "customerid"=>59839, "custphone"=>"08082000503", "custnetworkprovider"=>"AIRTEL", "custname"=>"Anonymous Customer", "custemail"=>"cezojejaze@nyrmusic.com", "custemailprovider"=>"COMPANY EMAIL", "custcreated"=>"2018-11-01T17:26:40.000Z", "accountid"=>6076, "acctbusinessname"=>"Simply Recharge", "acctcontactperson"=>"Jolaoso Yusuf", "acctcountry"=>"NG", "acctbearsfeeattransactiontime"=>1, "acctparent"=>1, "acctvpcmerchant"=>"N/A", "acctalias"=>nil, "acctisliveapproved"=>0, "orderref"=>"URF_MMGH_1545824546523_5297935", "paymentplan"=>nil, "paymentpage"=>nil, "raveref"=>nil, "amountsettledforthistransaction"=>49.3, "meta"=>[]}
+
+}
+```
+
+If a transaction couldn't be verified successfully, `error` and `transaction_complete` would both come as `false`.
+
+#### Full Mobile Money Transaction Flow:
+
+```ruby
+
+require_relative './lib/rave_ruby'
+
+
+# This is a rave object which is expecting public and secret keys
+rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
+
+
+# This is used to perform mobile money charge
+
+payload = {
+    "amount" => "50",
+    "email" => "cezojejaze@nyrmusic.com",
+    "phonenumber" => "08082000503",
+    "network" => "MTN",
+    "redirect_url" => "https://webhook.site/6eb017d1-c605-4faa-b543-949712931895",
+    "IP" => ""
+}
+
+# To initiate mobile money transaction
+charge_mobile_money = MobileMoney.new(rave)
+
+response = charge_mobile_money.initiate_charge(payload)
+
+print response
+
+# To verify the mobile money transaction
+response = charge_mobile_money.verify_charge(response["txRef"])
+
+print response
+
+```
+
+### `Mpesa.new(rave)`
 
 
 ## Development
