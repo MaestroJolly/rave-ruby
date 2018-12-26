@@ -56,7 +56,7 @@ rave = RaveRuby.new("YOUR_RAVE_LIVE_PUBLIC_KEY", "YOUR_RAVE_LIVE_SECRET_KEY", tr
 ## Rave Objects
 
 - [Account.new(rave)](#account.new(rave))
-- [Card.new(rave)](#card.new(rave))
+- [Card.new(rave)](#cardnewrave)
 - [Preauth.new(rave)](#preauth.new(rave))
 - [MobileMoney.new(rave)](#mobilemoney.new(rave))
 - [Mpesa.new(rave)](#mpesa.new(rave))
