@@ -23,7 +23,7 @@ class Mpesa < MpesaBase
 
         data.merge!({"PBFPubKey" => public_key, "payment_type" => "mpesa", "country" => "KE", "is_mpesa" => "1", "is_mpesa_lipa" => true, "currency" => "KES"})
 
-        required_parameters = ["amount", "email", "phonenumber", "IP"]
+        required_parameters = ["amount", "email", "phonenumber"]
         check_passed_parameters(required_parameters, data)
 
         encrypt_data = Util.encrypt(hashed_secret_key, data)

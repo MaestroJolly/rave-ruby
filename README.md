@@ -60,7 +60,7 @@ rave = RaveRuby.new("YOUR_RAVE_LIVE_PUBLIC_KEY", "YOUR_RAVE_LIVE_SECRET_KEY", tr
 - [Preauth.new(rave)](#preauthnewrave)
 - [MobileMoney.new(rave)](#mobilemoneynewrave)
 - [Mpesa.new(rave)](#mpesanewrave)
-- [SubAccount.new(rave)](#subaccountrave)
+- [SubAccount.new(rave)](#subaccountnewrave)
 - [PaymentPlan.new(rave)](#paymentplannewrave)
 - [Subscription.new(rave)](#subscriptionnewrave)
 - [Transfer.new(rave)](#transfernewrave)
@@ -672,10 +672,6 @@ This function is called to initiate mobile money transaction. The payload should
 
 - `network`,
 
-- `IP`,
-
-- `redirect_url`
-
 You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
 
 #### Here's a sample mobile money charge call:
@@ -759,6 +755,106 @@ print response
 ```
 
 ### `Mpesa.new(rave)`
+
+To perform mpesa transactions, instantiate the mpesa object and pass rave object as its argument.
+
+Its functions includes:
+
+- `.initiate_charge`
+- `.verify_charge`
+
+#### `.initiate_charge(payload)`
+
+This function is called to initiate mpesa transaction. The payload should be a ruby hash with mpesa details. Its parameters should include the following:
+
+- `amount`,
+
+- `email`,
+
+- `phonenumber`,
+
+
+You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
+
+#### Here's a sample mpesa charge call:
+
+```ruby
+response = charge_mpesa.initiate_charge(payload)
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+
+{
+    "error"=>false, "status"=>"pending", "validation_required"=>true, "txRef"=>"MC-0ad3251bcdde39b16c225e9fc46e992c", "flwRef"=>"8833703548", "amount"=>"100", "currency"=>"KES", "paymentType"=>"mpesa"
+}
+
+```
+
+#### `.verify_charge(txRef)`
+
+You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` call.
+
+A sample verify_charge call:
+
+```ruby
+response = charge_mpesa.verify_charge(response["txRef"])
+```
+
+### which returns:
+
+It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
+
+Full sample response returned if a transaction is successfully verified:
+
+```ruby
+
+{
+    "error"=>false, "transaction_complete"=>true, "data"=>{"txid"=>372498, "txref"=>"MC-0ad3251bcdde39b16c225e9fc46e992c", "flwref"=>"8833703548", "devicefingerprint"=>"N/A", "cycle"=>"one-time", "amount"=>100, "currency"=>"KES", "chargedamount"=>100, "appfee"=>1.4, "merchantfee"=>0, "merchantbearsfee"=>0, "chargecode"=>"00", "chargemessage"=>nil, "authmodel"=>"VBVSECURECODE", "ip"=>"::ffff:10.43.205.176", "narration"=>"funds payment", "status"=>"successful", "vbvcode"=>"N/A", "vbvmessage"=>"N/A", "authurl"=>"N/A", "acctcode"=>"00", "acctmessage"=>"MPESA COMPLETED", "paymenttype"=>"mpesa", "paymentid"=>"N/A", "fraudstatus"=>"ok", "chargetype"=>"normal", "createdday"=>4, "createddayname"=>"THURSDAY", "createdweek"=>52, "createdmonth"=>11, "createdmonthname"=>"DECEMBER", "createdquarter"=>4, "createdyear"=>2018, "createdyearisleap"=>false, "createddayispublicholiday"=>0, "createdhour"=>18, "createdminute"=>50, "createdpmam"=>"pm", "created"=>"2018-12-27T18:50:51.000Z", "customerid"=>65231, "custphone"=>"0926420185", "custnetworkprovider"=>"UNKNOWN PROVIDER", "custname"=>"Anonymous customer", "custemail"=>"user@exampe.com", "custemailprovider"=>"COMPANY EMAIL", "custcreated"=>"2018-11-27T15:23:38.000Z", "accountid"=>6076, "acctbusinessname"=>"Simply Recharge", "acctcontactperson"=>"Jolaoso Yusuf", "acctcountry"=>"NG", "acctbearsfeeattransactiontime"=>1,
+"acctparent"=>1, "acctvpcmerchant"=>"N/A", "acctalias"=>nil, "acctisliveapproved"=>0, "orderref"=>"8833703548", "paymentplan"=>nil, "paymentpage"=>nil, "raveref"=>nil, "amountsettledforthistransaction"=>98.6, "meta"=>[{"id"=>1259900, "metaname"=>"MPESARESPONSE", "metavalue"=>"{\"billrefnumber\":\"8833703548\",\"transactionamount\":\"100.00\",\"transactionid\":372498,\"type\":\"mpesa\"}", "createdAt"=>"2018-12-27T18:50:56.000Z", "updatedAt"=>"2018-12-27T18:50:56.000Z", "deletedAt"=>nil, "getpaidTransactionId"=>372498}]}
+}
+```
+
+If a transaction couldn't be verified successfully, `error` and `transaction_complete` would both come as `false`.
+
+#### Full Mpesa Transaction Flow:
+
+```ruby
+
+require_relative './lib/rave_ruby'
+
+
+# This is a rave object which is expecting public and secret keys
+rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
+
+
+# This is used to perform mpesa charge
+
+payload = {
+    "amount" => "100",
+    "phonenumber" => "0926420185",
+    "email" => "user@exampe.com",
+    "IP" => "40.14.290",
+    "narration" => "funds payment",
+}
+
+# To initiate mpesa transaction
+charge_mpesa = Mpesa.new(rave)
+
+response = charge_mpesa.initiate_charge(payload)
+
+print response
+
+# To verify the mpesa transaction
+response = charge_mpesa.verify_charge(response["txRef"])
+
+print response
+
+```
+
+### `SubAccount.new(rave)`
 
 
 ## Development

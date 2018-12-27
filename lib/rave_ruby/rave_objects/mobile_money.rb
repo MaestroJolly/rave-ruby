@@ -22,7 +22,7 @@ class MobileMoney < MobileMoneyBase
 
         data.merge!({"PBFPubKey" => public_key, "payment_type" => "mobilemoneygh", "country" => "GH", "is_mobile_money_gh"=> 1, "currency" => "GHS"})
 
-        required_parameters = ["amount", "email", "phonenumber", "network", "IP"]
+        required_parameters = ["amount", "email", "phonenumber", "network"]
         check_passed_parameters(required_parameters, data)
 
         encrypt_data = Util.encrypt(hashed_secret_key, data)
