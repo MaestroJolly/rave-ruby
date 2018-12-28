@@ -856,6 +856,172 @@ print response
 
 ### `SubAccount.new(rave)`
 
+This is used to process and manage subaccount flow. To instantiate the subaccount object and pass rave object as its argument.
+
+Its functions includes:
+
+- `.create_subaccount`
+- `.list_subaccounts`
+- `.fetch_subaccount`
+- `.delete_subaccount`
+
+#### `.create_subaccount(payload)`
+
+This function is called to initiate subaccount transaction. The payload should be a ruby hash with the subaccount details. Its parameters should include the following:
+
+- `account_bank`,
+
+- `account_number`,
+
+- `business_name`,
+
+- `business_email`,
+
+- `business_contact`,
+
+- `business_contact_mobile`,
+
+- `business_mobile`,
+
+- `split_type`,
+
+- `split_value`,
+
+#### `NOTE:` 
+
+- split_type can be set as percentage or flat when set as percentage it means you want to take a percentage fee on all transactions, and vice versa for flat this means you want to take a flat fee on every transaction.
+
+- split_value can be a percentage value or flat value depending on what was set on split_type
+
+You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
+
+#### Here's a sample create_subaccount call:
+
+```ruby
+response = subaccount.create_subaccount(payload)
+```
+
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "id"=>350, "data"=>{"id"=>350, "account_number"=>"0690000033", "account_bank"=>"044", "business_name"=>"Test Stores", "fullname"=>"Bale Gary", "date_created"=>"2018-12-28T16:20:40.000Z", "meta"=>[{"metaname"=>"MarketplaceID", "metavalue"=>"ggs-920900"}], "account_id"=>14101, "split_ratio"=>1, "split_type"=>"flat", "split_value"=>3000, "subaccount_id"=>"RS_CC09B109AA8F0CA5D9CE067492C548DA", "bank_name"=>"ACCESS BANK NIGERIA", "country"=>"NG"}
+}
+
+```
+
+#### `.list_subaccounts`
+
+This function is called to list all subaccounts under an account. The function can be initiated by calling it on a subaccount object.
+
+#### Here's a sample create_subaccount call:
+
+```ruby
+response = subaccount.list_subaccounts
+```
+
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+
+{
+    "error"=>false, "data"=>{"status"=>"success", "message"=>"SUBACCOUNTS", "data"=>{"page_info"=>{"total"=>6, "current_page"=>1, "total_pages"=>1}, "subaccounts"=>[{"id"=>350, "account_number"=>"0690000033", "account_bank"=>"044", "business_name"=>"Test Stores", "fullname"=>"Bale Gary", "date_created"=>"2018-12-28T16:20:40.000Z", "meta"=>[{"metaname"=>"MarketplaceID", "metavalue"=>"ggs-920900"}], "account_id"=>14101, "split_ratio"=>1, "split_type"=>"flat", "split_value"=>3000, "subaccount_id"=>"RS_CC09B109AA8F0CA5D9CE067492C548DA", "bank_name"=>"ACCESS BANK NIGERIA", "country"=>"NG"}, {"id"=>344, "account_number"=>"0690000041", "account_bank"=>"044", "business_name"=>"Sub 2", "fullname"=>"Alexis Rogers", "date_created"=>"2018-12-21T11:39:09.000Z", "meta"=>nil, "account_id"=>13633, "split_ratio"=>1, "split_type"=>"flat", "split_value"=>100, "subaccount_id"=>"RS_A75DB3502DDE69D07834A770888C26EE", "bank_name"=>"ACCESS BANK NIGERIA", "country"=>"NG"}, {"id"=>343, "account_number"=>"0690000031", "account_bank"=>"044", "business_name"=>"Sub 1", "fullname"=>"Forrest Green", "date_created"=>"2018-12-21T11:37:00.000Z", "meta"=>nil, "account_id"=>13632, "split_ratio"=>1, "split_type"=>"flat", "split_value"=>40, "subaccount_id"=>"RS_D073562598485BCEEB0A5287F99623FC", "bank_name"=>"ACCESS BANK NIGERIA", "country"=>"NG"}, {"id"=>325, "account_number"=>"0690000032", "account_bank"=>"044", "business_name"=>"Jake Stores", "fullname"=>"Pastor Bright", "date_created"=>"2018-12-13T20:34:51.000Z", "meta"=>[{"metaname"=>"MarketplaceID", "metavalue"=>"ggs-920900"}], "account_id"=>13212, "split_ratio"=>1, "split_type"=>"flat", "split_value"=>3000, "subaccount_id"=>"RS_4091F27A32D176070DA3CAF018E3450E", "bank_name"=>"ACCESS BANK NIGERIA", "country"=>"NG"}, {"id"=>126, "account_number"=>"0690000037", "account_bank"=>"044", "business_name"=>"Sub Account 2", "fullname"=>"Ibra Mili", "date_created"=>"2018-10-12T15:08:48.000Z", "meta"=>nil, "account_id"=>9522, "split_ratio"=>1, "split_type"=>"flat", "split_value"=>500, "subaccount_id"=>"RS_AE7B0858E69C6BFEB5C143CAA0A13FC3", "bank_name"=>"ACCESS BANK NIGERIA", "country"=>"NG"}, {"id"=>125, "account_number"=>"0690000035", "account_bank"=>"044", "business_name"=>"sub account 1", "fullname"=>"Peter Crouch", "date_created"=>"2018-10-12T14:39:41.000Z", "meta"=>nil, "account_id"=>9520, "split_ratio"=>1, "split_type"=>"flat", "split_value"=>100, "subaccount_id"=>"RS_2B1B3B6985172B9046A58DCA9E9026E0", "bank_name"=>"ACCESS BANK NIGERIA", "country"=>"NG"}]}}
+}
+
+```
+
+#### `.fetch_subaccount(subaccount_id)`
+
+This function is used to fetch a subaccount details by taking in the subaccount id as its argument.
+
+#### Here's a sample fetch_subaccount call:
+
+```ruby
+response = subaccount.fetch_subaccount("RS_CC09B109AA8F0CA5D9CE067492C548DA")
+```
+
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "data"=>{"status"=>"success", "message"=>"SUBACCOUNT", "data"=>{"id"=>350, "account_number"=>"0690000033", "account_bank"=>"044", "business_name"=>"Test Stores", "fullname"=>"Bale Gary", "date_created"=>"2018-12-28T16:20:40.000Z", "meta"=>[{"metaname"=>"MarketplaceID", "metavalue"=>"ggs-920900"}], "account_id"=>14101, "split_ratio"=>1, "split_type"=>"flat", "split_value"=>3000, "subaccount_id"=>"RS_CC09B109AA8F0CA5D9CE067492C548DA", "bank_name"=>"ACCESS BANK NIGERIA", "country"=>"NG"}}
+}
+```
+
+#### `.delete_subaccount(subaccount_id)`
+
+This function is used to delete a subaccount by taking in the subaccount id as its argument.
+
+#### Here's a sample delete_subaccount call:
+
+```ruby
+response = subaccount.delete_subaccount("RS_CC09B109AA8F0CA5D9CE067492C548DA")
+```
+
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "data"=>{"status"=>"success", "message"=>"SUBACCOUNT-DELETED", "data"=>"Deleted"}
+}
+```
+
+#### Full SubAccount Flow:
+
+```ruby
+
+require_relative './lib/rave_ruby'
+
+
+# This is a rave object which is expecting public and secret keys
+rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
+
+
+# This is the payload for sub account creation
+
+payload = {
+	"account_bank" => "044",
+	"account_number" => "0690000033",
+	"business_name" => "Test Stores",
+	"business_email" => "test@test.com",
+	"business_contact" => "john doe",
+	"business_contact_mobile" => "09083772",
+	"business_mobile" => "0188883882",
+    "split_type" => "flat",
+    "split_value" => 3000,
+	"meta" => [{"metaname": "MarketplaceID", "metavalue": "ggs-920900"}]
+}
+
+# Instantiate the subaccount object
+subaccount = SubAccount.new(rave)
+
+# This is used to create a subaccount
+response = subaccount.create_subaccount(payload)
+print response
+
+# This is used to list all subaccounts
+response = subaccount.list_subaccounts
+print response
+
+# This is used to fetch a subaccount by taking in the subaccount id
+response = subaccount.fetch_subaccount("RS_A59429B9C94C5A862F731711290B9ADD")
+print response
+
+# This is used to delete a subaccount by taking in the subaccount id
+response = subaccount.delete_subaccount("RS_A59429B9C94C5A862F731711290B9ADD")
+print response
+
+```
+
+### `PaymentPlan.new(rave)`
 
 ## Development
 
