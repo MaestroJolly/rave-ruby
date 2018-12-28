@@ -856,7 +856,7 @@ print response
 
 ### `SubAccount.new(rave)`
 
-This is used to process and manage subaccount flow. To instantiate the subaccount object and pass rave object as its argument.
+This is used to process and manage subaccount flow. Instantiate the subaccount object and pass rave object as its argument.
 
 Its functions includes:
 
