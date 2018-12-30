@@ -68,7 +68,7 @@ rave = RaveRuby.new("YOUR_RAVE_LIVE_PUBLIC_KEY", "YOUR_RAVE_LIVE_SECRET_KEY", tr
 - [Ussd.new(rave)](#ussdnewrave)
 - [ListBanks.new(rave)](#listbanksnewrave)
 
-### `Account.new(rave)`
+## `Account.new(rave)`
 
 To perform account transactions, instantiate the account object and pass rave object as its argument.
 
@@ -78,7 +78,7 @@ Its functions includes:
 - `.validate_charge`
 - `.verify_charge`
 
-#### `.initiate_charge(payload)`
+### `.initiate_charge(payload)`
 
 This function is called to initiate account transaction. The payload should be a ruby hash with account details. Its parameters should include the following:
 
@@ -122,7 +122,7 @@ A `RaveServerError` is raised if there's an error with the charge.
 
 ```
 
-#### `.validate_charge(flwRef, "OTP")`
+### `.validate_charge(flwRef, "OTP")`
 
 After a successful charge, most times you will be asked to verify with OTP. To check if this is required, check the validation_required key in the response of the charge call i.e `response["validation_required"]` is equal to `true`.
 
@@ -169,7 +169,7 @@ Otherwise if validation is successful using OTP, you will receive a response sim
 
 With `chargeResponseCode` equals to `00` which means it validated successfully.
 
-#### `.verify_charge(txRef)`
+### `.verify_charge(txRef)`
 
 You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` or `validate_charge` call.
 
@@ -179,7 +179,7 @@ You can call the `verify_charge` function to check if your transaction was compl
 response = charge_account.verify_charge(response["txRef"])
 ```
 
-### which returns:
+#### which returns:
 
 It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
 
@@ -241,7 +241,7 @@ response = charge_account.verify_charge(response["txRef"])
 print response
 ```
 
-### `Card.new(rave)`
+## `Card.new(rave)`
 
 To perform card transactions, instantiate the card object and pass rave object as its argument.
 
@@ -253,7 +253,7 @@ Its functions includes:
 - `.validate_charge`
 - `.verify_charge`
 
-#### `.initiate_charge(payload)`
+### `.initiate_charge(payload)`
 
 This function is called to initiate card transaction. The payload should be a ruby hash with card details. Its parameters should include the following:
 
@@ -309,7 +309,7 @@ A `RaveServerError` is raised if there's an error with the card charge.
 
 ```
 
-#### `.update_payload(suggested_auth, payload, pin or address)`
+### `.update_payload(suggested_auth, payload, pin or address)`
 
 You need to update the payload with `pin` or `address` parameters depending on the `suggested_auth` returned from the initial charge call i.e `suggested_auth = response["suggested_auth"]` and passing it as a parameter of the `.get_auth_type(suggested_auth)` method.
 
@@ -344,7 +344,7 @@ This is a sample response returned after updating payload with suggested_auth `p
 }
 ```
 
-#### `.validate_charge(flwRef, "OTP")`
+### `.validate_charge(flwRef, "OTP")`
 
 After a successful charge, most times you will be asked to verify with OTP. To check if this is required, check the validation_required key in the response of the charge call i.e `response["validation_required"]` is equal to `true`.
 
@@ -390,7 +390,7 @@ Otherwise if validation is successful using OTP, you will receive a response sim
 ```
 With `chargeResponseCode` equals to `00` which means it validated successfully.
 
-#### `.verify_charge(txRef)`
+### `.verify_charge(txRef)`
 
 You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` or `validate_charge` call.
 
@@ -400,7 +400,7 @@ You can call the `verify_charge` function to check if your transaction was compl
 response = charge_card.verify_charge(response["txRef"])
 ```
 
-### which returns:
+#### which returns:
 
 It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
 
@@ -481,7 +481,7 @@ print response
 
 `response['card']['card_tokens']['embed_tokens']` which is similar to this: `flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k`
 
-### `Preauth.new(rave)`
+## `Preauth.new(rave)`
 
 This is used to process a preauthorized card transaction.
 
@@ -533,7 +533,7 @@ It returns this response in ruby hash. A sample response:
 
 ```
 
-#### `.capture(flwRef)`
+### `.capture(flwRef)`
 
 The capture method is called after the preauth card has been charged. It takes in the `flwRef` from the charge response and call optionally take in amount less than the original amount authorised on the card as displayed below.
 
@@ -554,7 +554,7 @@ It returns this response in ruby hash. A sample response:
 
 ```
 
-#### `.refund(flwRef)`
+### `.refund(flwRef)`
 
 This is called to perform a `refund` of a preauth transaction.
 
@@ -565,7 +565,7 @@ response = preauth.refund(response["flwRef"])
 
 ```
 
-#### `.void(flwRef)`
+### `.void(flwRef)`
 
 This is called to `void` a preauth transaction.
 
@@ -576,7 +576,7 @@ response = preauth.void(response["flwRef"])
 
 ```
 
-#### `.verify_preauth(txRef)`
+### `.verify_preauth(txRef)`
 
 The verify_preauth method can be called after capture is successfully completed by passing the `txRef` from the `charge` or `capture` response as its argument as shown below.
 
@@ -651,7 +651,7 @@ print response
 ```
 
 
-### `MobileMoney.new(rave)`
+## `MobileMoney.new(rave)`
 
 To perform ghana mobile money transactions, instantiate the mobile money object and pass rave object as its argument.
 
@@ -660,7 +660,7 @@ Its functions includes:
 - `.initiate_charge`
 - `.verify_charge`
 
-#### `.initiate_charge(payload)`
+### `.initiate_charge(payload)`
 
 This function is called to initiate mobile money transaction. The payload should be a ruby hash with mobile money details. Its parameters should include the following:
 
@@ -691,7 +691,7 @@ It returns this response in ruby hash. A sample response:
 
 ```
 
-#### `.verify_charge(txRef)`
+### `.verify_charge(txRef)`
 
 You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` call.
 
@@ -754,7 +754,7 @@ print response
 
 ```
 
-### `Mpesa.new(rave)`
+## `Mpesa.new(rave)`
 
 To perform mpesa transactions, instantiate the mpesa object and pass rave object as its argument.
 
@@ -763,7 +763,7 @@ Its functions includes:
 - `.initiate_charge`
 - `.verify_charge`
 
-#### `.initiate_charge(payload)`
+### `.initiate_charge(payload)`
 
 This function is called to initiate mpesa transaction. The payload should be a ruby hash with mpesa details. Its parameters should include the following:
 
@@ -793,7 +793,7 @@ It returns this response in ruby hash. A sample response:
 
 ```
 
-#### `.verify_charge(txRef)`
+### `.verify_charge(txRef)`
 
 You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` call.
 
@@ -854,7 +854,7 @@ print response
 
 ```
 
-### `SubAccount.new(rave)`
+## `SubAccount.new(rave)`
 
 This is used to process and manage subaccount flow. Instantiate the subaccount object and pass rave object as its argument.
 
@@ -865,7 +865,7 @@ Its functions includes:
 - `.fetch_subaccount`
 - `.delete_subaccount`
 
-#### `.create_subaccount(payload)`
+### `.create_subaccount(payload)`
 
 This function is called to initiate subaccount transaction. The payload should be a ruby hash with the subaccount details. Its parameters should include the following:
 
@@ -910,7 +910,7 @@ It returns this response in ruby hash. A sample response:
 
 ```
 
-#### `.list_subaccounts`
+### `.list_subaccounts`
 
 This function is called to list all subaccounts under an account. The function can be initiated by calling it on a subaccount object.
 
@@ -932,7 +932,7 @@ It returns this response in ruby hash. A sample response:
 
 ```
 
-#### `.fetch_subaccount(subaccount_id)`
+### `.fetch_subaccount(subaccount_id)`
 
 This function is used to fetch a subaccount details by taking in the subaccount id as its argument.
 
@@ -952,7 +952,7 @@ It returns this response in ruby hash. A sample response:
 }
 ```
 
-#### `.delete_subaccount(subaccount_id)`
+### `.delete_subaccount(subaccount_id)`
 
 This function is used to delete a subaccount by taking in the subaccount id as its argument.
 
@@ -1019,7 +1019,7 @@ print response
 
 ```
 
-### `PaymentPlan.new(rave)`
+## `PaymentPlan.new(rave)`
 
 This is used to process and manage payment plan flow. Instantiate the paymentplan object and pass rave object as its argument.
 
@@ -1031,7 +1031,7 @@ Its functions includes:
 - `.edit_payment_plan`
 - `.cancel_payment_plan`
 
-#### `.create_payment_plan(payload)`
+### `.create_payment_plan(payload)`
 
 This function is called to initiate payment plan transaction. The payload should be a ruby hash with the payment plan details. Its parameters should include the following:
 
@@ -1088,7 +1088,7 @@ It returns this response in ruby hash. A sample response:
 
 ```
 
-#### `.list_payment_plans`
+### `.list_payment_plans`
 
 This function is called to list all payment plans under an account. The function can be initiated by calling it on a paymentplan object.
 
@@ -1108,7 +1108,7 @@ It returns this response in ruby hash. A sample response:
 }
 ```
 
-#### `.fetch_payment_plan(payment_plan_id, payment_plan_name)`
+### `.fetch_payment_plan(payment_plan_id, payment_plan_name)`
 
 This function is used to fetch a payment plan details by taking in the payment plan id and payment plan name as its argument.
 
@@ -1128,7 +1128,7 @@ It returns this response in ruby hash. A sample response:
 }
 ```
 
-#### `.edit_payment_plan(payment_plan_id, payment_plan_name)`
+### `.edit_payment_plan(payment_plan_id, payment_plan_name)`
 
 This function is used to edit a payment plan by taking in the the payment plan id and payment plan name as its argument.
 
@@ -1150,7 +1150,7 @@ It returns this response in ruby hash. A sample response:
 }
 ```
 
-#### `.cancel_payment_plan("payment_plan_id")`
+### `.cancel_payment_plan("payment_plan_id")`
 
 This function is used to cancel a payment plan by taking in the payment plan id as its argument.
 
@@ -1213,7 +1213,7 @@ response = payment_plan.cancel_payment_plan("1298")
 print response
 
 ```
-### `Subscription.new(rave)`
+## `Subscription.new(rave)`
 
 
 ## Development
