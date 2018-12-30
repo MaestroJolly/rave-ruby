@@ -701,7 +701,7 @@ You can call the `verify_charge` function to check if your transaction was compl
 response = charge_mobile_money.verify_charge(response["txRef"])
 ```
 
-### which returns:
+#### which returns:
 
 It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
 
