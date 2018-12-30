@@ -20,7 +20,7 @@ class PaymentPlan < PaymentPlanBase
         return handle_create_response(response)
     end 
 
-    def list_payment_plan
+    def list_payment_plans
         base_url = rave_object.base_url
         response = get_request("#{base_url}#{BASE_ENDPOINTS::PAYMENT_PLANS_ENDPOINT}/query",{"seckey" => rave_object.secret_key.dup})
         return handle_list_response(response)

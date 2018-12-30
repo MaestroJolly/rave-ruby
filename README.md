@@ -96,7 +96,7 @@ This function is called to initiate account transaction. The payload should be a
 
 You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
 
-#### Here's a sample account charge call:
+#### Sample account charge call:
 
 ```ruby
 response = charge_account.initiate_charge(payload)
@@ -113,7 +113,7 @@ It returns this response in ruby hash. A sample response:
 ```
 A `RaveServerError` is raised if there's an error with the charge.
 
-#### Here's a sample error response if an exception is raised:
+#### Sample error response if an exception is raised:
 
 ```ruby
 {
@@ -134,7 +134,7 @@ authurl = response['authurl']
 
 If validation is required by OTP, you need to pass the `flwRef` from the response of the charge call as well as the OTP.
 
-A sample validate_charge call is:
+#### Sample validate_charge call is:
 
 ```ruby
 response = charge_account.validate_charge(response["flwRef"], "12345")
@@ -173,7 +173,7 @@ With `chargeResponseCode` equals to `00` which means it validated successfully.
 
 You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` or `validate_charge` call.
 
-A sample verify_charge call:
+#### Sample verify_charge call:
 
 ```ruby
 response = charge_account.verify_charge(response["txRef"])
@@ -279,7 +279,7 @@ This function is called to initiate card transaction. The payload should be a ru
 
 You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
 
-#### Here's a sample card charge call:
+#### Sample card charge call:
 
 ```ruby
 response = charge_card.initiate_charge(payload)
@@ -299,7 +299,7 @@ It returns this response in ruby hash. A sample response:
 
 A `RaveServerError` is raised if there's an error with the card charge.
 
-#### Here's a sample error response if an exception is raised:
+#### Sample error response if an exception is raised:
 
 ```ruby
 {
@@ -394,7 +394,7 @@ With `chargeResponseCode` equals to `00` which means it validated successfully.
 
 You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` or `validate_charge` call.
 
-A sample verify_charge call:
+#### Sample verify_charge call:
 
 ```ruby
 response = charge_card.verify_charge(response["txRef"])
@@ -517,7 +517,7 @@ The payload should be a ruby hash containing card information. It should have th
 
 You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
 
-#### Here's a sample preauth charge call:
+#### Sample preauth charge call:
 
 ```ruby
 response = preauth.initiate_charge(payload)
@@ -537,7 +537,7 @@ It returns this response in ruby hash. A sample response:
 
 The capture method is called after the preauth card has been charged. It takes in the `flwRef` from the charge response and call optionally take in amount less than the original amount authorised on the card as displayed below.
 
-#### Here's a sample capture call:
+#### Sample capture call:
 
 ```ruby
 response = preauth.capture(response["flwRef"], "30")
@@ -558,7 +558,7 @@ It returns this response in ruby hash. A sample response:
 
 This is called to perform a `refund` of a preauth transaction.
 
-#### Here's a sample refund call:
+#### Sample refund call:
 
 ```ruby
 response = preauth.refund(response["flwRef"])
@@ -569,7 +569,7 @@ response = preauth.refund(response["flwRef"])
 
 This is called to `void` a preauth transaction.
 
-#### Here's a sample void call:
+#### Sample void call:
 
 ```ruby
 response = preauth.void(response["flwRef"])
@@ -580,7 +580,7 @@ response = preauth.void(response["flwRef"])
 
 The verify_preauth method can be called after capture is successfully completed by passing the `txRef` from the `charge` or `capture` response as its argument as shown below.
 
-#### A sample verify_preauth call:
+#### Sample verify_preauth call:
 
 ```ruby
 response = preauth.verify_preauth(response["txRef"])
@@ -674,7 +674,7 @@ This function is called to initiate mobile money transaction. The payload should
 
 You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
 
-#### Here's a sample mobile money charge call:
+#### Sample mobile money charge call:
 
 ```ruby
 response = charge_mobile_money.initiate_charge(payload)
@@ -695,7 +695,7 @@ It returns this response in ruby hash. A sample response:
 
 You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` call.
 
-A sample verify_charge call:
+#### Sample verify_charge call:
 
 ```ruby
 response = charge_mobile_money.verify_charge(response["txRef"])
@@ -776,7 +776,7 @@ This function is called to initiate mpesa transaction. The payload should be a r
 
 You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
 
-#### Here's a sample mpesa charge call:
+#### Sample mpesa charge call:
 
 ```ruby
 response = charge_mpesa.initiate_charge(payload)
@@ -797,13 +797,13 @@ It returns this response in ruby hash. A sample response:
 
 You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` call.
 
-A sample verify_charge call:
+#### Sample verify_charge call:
 
 ```ruby
 response = charge_mpesa.verify_charge(response["txRef"])
 ```
 
-### which returns:
+#### which returns:
 
 It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
 
@@ -891,11 +891,9 @@ This function is called to initiate subaccount transaction. The payload should b
 
 - split_type can be set as percentage or flat when set as percentage it means you want to take a percentage fee on all transactions, and vice versa for flat this means you want to take a flat fee on every transaction.
 
-- split_value can be a percentage value or flat value depending on what was set on split_type
+- split_value can be a percentage value or flat value depending on what was set on split_type.
 
-You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
-
-#### Here's a sample create_subaccount call:
+#### Sample create_subaccount call:
 
 ```ruby
 response = subaccount.create_subaccount(payload)
@@ -916,7 +914,7 @@ It returns this response in ruby hash. A sample response:
 
 This function is called to list all subaccounts under an account. The function can be initiated by calling it on a subaccount object.
 
-#### Here's a sample create_subaccount call:
+#### Sample list_subaccount call:
 
 ```ruby
 response = subaccount.list_subaccounts
@@ -938,7 +936,7 @@ It returns this response in ruby hash. A sample response:
 
 This function is used to fetch a subaccount details by taking in the subaccount id as its argument.
 
-#### Here's a sample fetch_subaccount call:
+#### Sample fetch_subaccount call:
 
 ```ruby
 response = subaccount.fetch_subaccount("RS_CC09B109AA8F0CA5D9CE067492C548DA")
@@ -958,7 +956,7 @@ It returns this response in ruby hash. A sample response:
 
 This function is used to delete a subaccount by taking in the subaccount id as its argument.
 
-#### Here's a sample delete_subaccount call:
+#### Sample delete_subaccount call:
 
 ```ruby
 response = subaccount.delete_subaccount("RS_CC09B109AA8F0CA5D9CE067492C548DA")
@@ -1022,6 +1020,201 @@ print response
 ```
 
 ### `PaymentPlan.new(rave)`
+
+This is used to process and manage payment plan flow. Instantiate the paymentplan object and pass rave object as its argument.
+
+Its functions includes:
+
+- `.create_payment_plan`
+- `.list_payment_plans`
+- `.fetch_payment_plan`
+- `.edit_payment_plan`
+- `.cancel_payment_plan`
+
+#### `.create_payment_plan(payload)`
+
+This function is called to initiate payment plan transaction. The payload should be a ruby hash with the payment plan details. Its parameters should include the following:
+
+- `amount`,
+
+- `name`,
+
+- `interval`,
+
+- `duration`,
+
+#### `NOTE:` 
+
+- amount: this is the amount for the plan
+
+- name: This is what would appear on the subscription reminder email
+
+- interval: This are the charge intervals possible values are:
+
+```
+daily;
+weekly;
+monthly;
+yearly;
+quarterly;
+bi-anually;
+every 2 days;
+every 90 days;
+every 5 weeks;
+every 12 months;
+every 6 years;
+every x y (where x is a number and y is the period e.g. every 5 months)
+
+```
+- duration: This is the frequency, it is numeric, e.g. if set to 5 and intervals is set to monthly you would be charged 5 months, and then the subscription stops.
+
+`If duration is not passed, any subscribed customer will be charged indefinitely.`
+
+#### Sample create_payment_plan call:
+
+```ruby
+response = payment_plan.create_payment_plan(payload)
+```
+
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "data"=>{"id"=>1298, "name"=>"New Test Plan", "amount"=>1000, "interval"=>"monthly", "duration"=>5, "status"=>"active",
+"currency"=>"NGN", "plan_token"=>"rpp_9002500b0440b470f02c", "date_created"=>"2018-12-30T10:54:06.000Z"}
+}
+
+```
+
+#### `.list_payment_plans`
+
+This function is called to list all payment plans under an account. The function can be initiated by calling it on a paymentplan object.
+
+#### Sample list_payment_plans call:
+
+```ruby
+response = payment_plan.list_payment_plans
+```
+
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "status"=>"success", "message"=>"QUERIED-PAYMENTPLANS", "data"=>{"page_info"=>{"total"=>21, "current_page"=>1, "total_pages"=>3}, "paymentplans"=>[{"id"=>1298, "name"=>"New Test Plan", "amount"=>1000, "interval"=>"monthly", "duration"=>5, "status"=>"active", "currency"=>"NGN", "plan_token"=>"rpp_9002500b0440b470f02c", "date_created"=>"2018-12-30T10:54:06.000Z"}, {"id"=>1225, "name"=>"Test Plan", "amount"=>100, "interval"=>"daily", "duration"=>5, "status"=>"active", "currency"=>"NGN", "plan_token"=>"rpp_6da8f78957b92b3e9128", "date_created"=>"2018-12-12T20:22:43.000Z"}, {"id"=>1196, "name"=>"Jack's Plan", "amount"=>100, "interval"=>"daily", "duration"=>5, "status"=>"active", "currency"=>"NGN", "plan_token"=>"rpp_49ae581c01d998841116", "date_created"=>"2018-12-04T16:42:58.000Z"}, {"id"=>1195, "name"=>"Test Plan", "amount"=>100, "interval"=>"daily", "duration"=>5, "status"=>"active", "currency"=>"NGN", "plan_token"=>"rpp_7156462224bc29c5e429", "date_created"=>"2018-12-04T16:39:41.000Z"}, {"id"=>1194, "name"=>"Test Plan", "amount"=>100, "interval"=>"daily", "duration"=>5, "status"=>"active", "currency"=>"NGN", "plan_token"=>"rpp_a361053c176ae01ae6ea", "date_created"=>"2018-12-04T16:39:14.000Z"}, {"id"=>1193, "name"=>"Test Plan", "amount"=>100, "interval"=>"daily", "duration"=>5, "status"=>"active", "currency"=>"NGN", "plan_token"=>"rpp_4a6ca4bedef850362dbd", "date_created"=>"2018-12-04T16:34:10.000Z"}, {"id"=>1192, "name"=>"Test Plan", "amount"=>100, "interval"=>"daily", "duration"=>5, "status"=>"active", "currency"=>"NGN", "plan_token"=>"rpp_7185c10c96eae1b62c92", "date_created"=>"2018-12-04T16:33:22.000Z"}, {"id"=>1191, "name"=>"Test Plan", "amount"=>100, "interval"=>"daily", "duration"=>5, "status"=>"active", "currency"=>"NGN", "plan_token"=>"rpp_c0bcf71beb2d048d0883", "date_created"=>"2018-12-04T16:32:00.000Z"}, {"id"=>1190, "name"=>"Test Plan", "amount"=>100, "interval"=>"daily", "duration"=>5, "status"=>"active", "currency"=>"NGN", "plan_token"=>"rpp_607c22f130a5a90e51af", "date_created"=>"2018-12-04T16:27:27.000Z"}, {"id"=>1154, "name"=>"N/A", "amount"=>0, "interval"=>"daily", "duration"=>0, "status"=>"cancelled", "currency"=>"NGN", "plan_token"=>"rpp_cb2ec11390fd718b6eb0", "date_created"=>"2018-11-27T11:31:21.000Z"}]}
+}
+```
+
+#### `.fetch_payment_plan(payment_plan_id, payment_plan_name)`
+
+This function is used to fetch a payment plan details by taking in the payment plan id and payment plan name as its argument.
+
+#### Sample fetch_payment_plan call:
+
+```ruby
+response = payment_plan.fetch_payment_plan("1298", "New Test Plan")
+```
+
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "data"=>{"page_info"=>{"total"=>1, "current_page"=>1, "total_pages"=>1}, "paymentplans"=>[{"id"=>1298, "name"=>"New Test Plan", "amount"=>1000, "interval"=>"monthly", "duration"=>5, "status"=>"active", "currency"=>"NGN", "plan_token"=>"rpp_9002500b0440b470f02c", "date_created"=>"2018-12-30T10:54:06.000Z"}]}
+}
+```
+
+#### `.edit_payment_plan(payment_plan_id, payment_plan_name)`
+
+This function is used to edit a payment plan by taking in the the payment plan id and payment plan name as its argument.
+
+#### Sample edit_payment_plan call:
+
+```ruby
+
+response = payment_plan.edit_payment_plan("1298", {"name" => "Updated Test Plan", "status" => "active"})
+```
+
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "data"=>{"id"=>1298, "name"=>"Updated Test Plan", "uuid"=>"rpp_9002500b0440b470f02c", "status"=>"active", "start"=>nil,
+"stop"=>nil, "initial_charge_amount"=>nil, "currency"=>"NGN", "amount"=>1000, "duration"=>5, "interval"=>"monthly", "createdAt"=>"2018-12-30T10:54:06.000Z", "updatedAt"=>"2018-12-30T11:26:17.000Z", "deletedAt"=>nil, "AccountId"=>3328, "paymentpageId"=>nil}
+}
+```
+
+#### `.cancel_payment_plan("payment_plan_id")`
+
+This function is used to cancel a payment plan by taking in the payment plan id as its argument.
+
+#### Sample cancel_payment_plan call:
+
+```ruby
+response = payment_plan.cancel_payment_plan("1298")
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "data"=>{"id"=>1298, "name"=>"Updated Test Plan", "uuid"=>"rpp_9002500b0440b470f02c", "status"=>"cancelled", "start"=>nil, "stop"=>nil, "initial_charge_amount"=>nil, "currency"=>"NGN", "amount"=>1000, "duration"=>5, "interval"=>"monthly", "createdAt"=>"2018-12-30T10:54:06.000Z", "updatedAt"=>"2018-12-30T11:44:55.000Z", "deletedAt"=>nil, "AccountId"=>3328, "paymentpageId"=>nil}
+}
+```
+
+#### Full PaymentPlan Flow:
+
+```ruby
+
+require_relative './lib/rave_ruby'
+
+
+# This is a rave object which is expecting public and secret keys
+rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
+
+# payment plan payload
+payload = {
+    "amount" => 1000,
+    "name" => "New Test Plan",
+    "interval" => "monthly",
+    "duration" => 5
+}
+
+
+# create an instance of the payment plan object
+payment_plan = PaymentPlan.new(rave)
+
+# method to create payment plan
+# response = payment_plan.create_payment_plan(payload)
+# print response
+
+# # method to list all payment plan
+# response = payment_plan.list_payment_plans
+# print response
+
+# method to fetch payment plan
+response = payment_plan.fetch_payment_plan("1298", "New Test Plan")
+print response
+
+
+# method to edit payment plan
+response = payment_plan.edit_payment_plan("1298", {"name" => "Updated Test Plan", "status" => "active"})
+print response
+
+# method to cancel payment plan
+response = payment_plan.cancel_payment_plan("1298")
+print response
+
+```
+### `Subscription.new(rave)`
+
 
 ## Development
 

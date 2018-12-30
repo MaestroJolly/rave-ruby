@@ -41,7 +41,7 @@ RSpec.describe PaymentPlan do
     end
 
     it 'should check if payment plan list is successfully returned' do
-        list_payment_plan_response = payment_plan.list_payment_plan
+        list_payment_plan_response = payment_plan.list_payment_plans
       expect(list_payment_plan_response["error"]).to eq(false)
     end
 
