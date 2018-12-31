@@ -1215,7 +1215,105 @@ print response
 ```
 ## `Subscription.new(rave)`
 
+This is used to process and manage subscription flow. Instantiate the subscription object and pass rave object as its argument.
 
+Its functions includes:
+
+- `.list_all_subscription`
+- `.fetch_subscription`
+- `.activate_subscription`
+- `.cancel_subscription`
+
+### `.list_all_subscription`
+
+This function is called to fetch and list all subscription.
+
+#### Sample list_all_subscription call:
+
+```ruby
+response = subscription.list_all_subscription
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "status"=>"success", "message"=>"SUBSCRIPTIONS-FETCHED", "data"=>{"page_info"=>{"total"=>0, "current_page"=>0, "total_pages"=>0}, "plansubscriptions"=>[]}, "plansubscriptions"=>[]
+}
+```
+
+### `.fetch_subscription("subscription_id", "subscription_email")`
+
+This function is called to fetch a single subscription taking the subscription id and subscription email as its arguments.
+
+#### Sample fetch_subscription call:
+
+```ruby
+response = subscription.fetch_subscription("1", "test@test.com")
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "status"=>"success", "message"=>"SUBSCRIPTIONS-FETCHED", "data"=>{"page_info"=>{"total"=>0, "current_page"=>0, "total_pages"=>0}, "plansubscriptions"=>[]}
+}
+```
+
+### `.activate_subscription("subscription_id")`
+
+This function is called to activate a subscription taking the subscription id as its argument.
+
+#### Sample activate_subscription call:
+
+```ruby
+response = subscription.activate_subscription(1533)
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+
+```
+
+### `.cancel_subscription("subscription_id")`
+
+This function is called to cancel a subscription taking the subscription id as its argument.
+
+#### Sample cancel_subscription call:
+
+```ruby
+response = subscription.cancel_subscription(1533)
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+
+```
+
+### Full Subscription Flow
+
+```ruby
+require_relative './lib/rave_ruby'
+
+# This is a rave object which is expecting public and secret keys
+rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
+
+subscription = Subscription.new(rave)
+response = subscription.list_all_subscription
+print response
+response = subscription.fetch_subscription("1", "test@test.com")
+print response
+response = subscription.activate_subscription(1533)
+print response
+response = subscription.cancel_subscription(1533)
+print response
+```
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

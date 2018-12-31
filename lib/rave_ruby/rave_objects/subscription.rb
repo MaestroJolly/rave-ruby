@@ -5,7 +5,7 @@ class Subscription < SubscriptionBase
 
     #method to list subscriptions
 
-    def list_all_subscription()
+    def list_all_subscription
         base_url = rave_object.base_url
         response = get_request("#{base_url}#{BASE_ENDPOINTS::SUBSCRIPTIONS_ENDPOINT}/query",{"seckey" => rave_object.secret_key.dup})
         return handle_list_all_subscription(response)
@@ -39,12 +39,10 @@ class Subscription < SubscriptionBase
         base_url = rave_object.base_url
         secret_key = rave_object.secret_key.dup
 
-        data.merge!({"seckey" => secret_key.dup})
+        # data.merge!({"seckey" => secret_key.dup})
 
         payload = {
             "seckey" => secret_key,
-            "client" => data,
-            "alg" => "3DES-24"
         }
         payload = payload.to_json
         response = post_request("#{base_url}#{BASE_ENDPOINTS::SUBSCRIPTIONS_ENDPOINT}/#{id}/activate",payload)
