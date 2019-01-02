@@ -1317,6 +1317,241 @@ print response
 
 ## `Transfer.new(rave)`
 
+This is used to initiate transfer flow. Instantiate the transfer object and pass rave object as its argument.
+
+Its functions includes:
+
+- `.initiate_transfer`
+- `.bulk_transfer`
+- `.get_fee`
+- `.get_balance`
+- `.fetch`
+- `.fetch_all_transfers`
+
+### `.initiate_transfer`
+
+This function is called to initiate a single transfer from one account to another. The payload should be a ruby hash with the beneficiary's account details. Its parameters should include the following:
+
+- `account_bank`,
+
+- `account_number`,
+
+- `amount`,
+
+- `narration`,
+
+- `currency`,
+
+#### `NOTE:` 
+
+For international transfers, you must pass a meta parameter as part of your payload as shown in the sample below:
+
+```ruby
+"meta": [
+    {
+      "AccountNumber": "09182972BH",
+      "RoutingNumber": "0000000002993",
+      "SwiftCode": "ABJG190",
+      "BankName": "BANK OF AMERICA, N.A., SAN FRANCISCO, CA",
+      "BeneficiaryName": "Mark Cuban",
+      "BeneficiaryAddress": "San Francisco, 4 Newton",
+      "BeneficiaryCountry": "US"
+    }
+]
+```
+#### Sample initiate_transfer call:
+
+```ruby
+response = transfer.initiate_transfer(payload)
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+
+{
+    "error"=>false, "id"=>4520, "data"=>{"id"=>4520, "account_number"=>"0690000044", "bank_code"=>"044", "fullname"=>"Mercedes Daniel", "date_created"=>"2019-01-02T08:07:26.000Z", "currency"=>"NGN", "amount"=>500, "fee"=>45, "status"=>"NEW", "reference"=>"MC-df53da98eb0d7475c9e33727dec09e78", "meta"=>nil, "narration"=>"New transfer", "complete_message"=>"", "requires_approval"=>0, "is_approved"=>1, "bank_name"=>"ACCESS BANK NIGERIA"}
+}
+```
+
+### `.bulk_transfer`
+
+This function is called to initiate a bulk transfer. The payload should be a ruby hash with the beneficiaries account details. Its parameters should include the following:
+
+- `title`,
+
+- `bulk_data`,
+
+#### `NOTE:`
+
+The bulk_data should consist of an array of the beneficiaries account details which includes `account_bank`, `account_number`, `amount`, `narration`, `currency`, `reference`.
+
+#### Sample bulk_transfer call:
+
+```ruby
+response = transfer.bulk_transfer(payload)
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+
+{
+    "error"=>false, "status"=>"success", "message"=>"BULK-TRANSFER-CREATED", "id"=>765, "data"=>{"id"=>765, "date_created"=>"2019-01-02T08:20:20.000Z", "approver"=>"N/A"}
+}
+```
+
+### `.get_fee`
+
+This function is called to get transfer rates for all Rave supported currencies. You may or may not pass in a currency as its argument. If you do not pass in a currency, all Rave supported currencies transfer rates will be returned.
+
+#### Sample get_fee call:
+
+```ruby
+response = transfer.get_fee(currency)
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "data"=>{"status"=>"success", "message"=>"TRANSFER-FEES", "data"=>[{"id"=>1, "fee_type"=>"value", "currency"=>"NGN", "fee"=>45, "createdAt"=>nil, "updatedAt"=>nil, "deletedAt"=>nil, "AccountId"=>1}]}
+}
+```
+
+### `.get_balance`
+
+This function is called to get balance an account. You may or may not pass in a currency as its argument.
+
+#### Sample get_balance call:
+
+```ruby
+response = transfer.get_balance(currency)
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "returned_data"=>{"status"=>"success", "message"=>"WALLET-BALANCE", "data"=>{"Id"=>27622, "ShortName"=>"NGN", "WalletNumber"=>"3927000121168", "AvailableBalance"=>100, "LedgerBalance"=>100}}
+}
+```
+
+### `.fetch`
+
+This function is called to fetch a single transfer. It takes in transfer refernce as its argument.
+
+#### Sample fetch call:
+
+```ruby
+response = transfer.fetch("Bulk Transfer 2")
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "returned_data"=>{"status"=>"success", "message"=>"QUERIED-TRANSFERS", "data"=>{"page_info"=>{"total"=>0, "current_page"=>0, "total_pages"=>0}, "transfers"=>[]}}
+}
+```
+
+### `.fetch_all_transfers`
+
+This function is called to fetch all transfers.
+
+#### Sample fetch all transfers call:
+
+```ruby
+response = transfer.fetch_all_transfers
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "returned_data"=>{"status"=>"success", "message"=>"QUERIED-TRANSFERS", "data"=>{"page_info"=>{"total"=>97, "current_page"=>1, "total_pages"=>10}, "transfers"=>[{"id"=>4520, "account_number"=>"0690000044", "bank_code"=>"044", "fullname"=>"Mercedes Daniel", "date_created"=>"2019-01-02T08:07:26.000Z", "currency"=>"NGN", "debit_currency"=>nil, "amount"=>500, "fee"=>45, "status"=>"FAILED", "reference"=>"MC-df53da98eb0d7475c9e33727dec09e78", "meta"=>nil, "narration"=>"New transfer", "approver"=>nil, "complete_message"=>"DISBURSE FAILED: Insufficient funds", "requires_approval"=>0, "is_approved"=>1, "bank_name"=>"ACCESS BANK NIGERIA"}, {"id"=>4103, "account_number"=>"0690000044", "bank_code"=>"044", "fullname"=>"Mercedes Daniel", "date_created"=>"2018-12-14T16:38:23.000Z", "currency"=>"NGN", "debit_currency"=>nil, "amount"=>500, "fee"=>45, "status"=>"FAILED", "reference"=>"MC-3b3814d6e2bc0d7d6683354abcdd5b98", "meta"=>nil, "narration"=>"New transfer", "approver"=>nil, "complete_message"=>"DISBURSE FAILED: Insufficient funds", "requires_approval"=>0, "is_approved"=>1, "bank_name"=>"ACCESS BANK NIGERIA"}, {"id"=>4102, "account_number"=>"0690000044", "bank_code"=>"044", "fullname"=>"Mercedes Daniel", "date_created"=>"2018-12-14T14:54:31.000Z", "currency"=>"NGN", "debit_currency"=>nil, "amount"=>500, "fee"=>45, "status"=>"FAILED", "reference"=>"MC-26efdf0a77145315ac7d62ee274371a5", "meta"=>nil, "narration"=>"New transfer", "approver"=>nil, "complete_message"=>"DISBURSE FAILED: Insufficient funds", "requires_approval"=>0, "is_approved"=>1, "bank_name"=>"ACCESS BANK NIGERIA"}, {"id"=>4101, "account_number"=>"0690000044", "bank_code"=>"044", "fullname"=>"Mercedes Daniel", "date_created"=>"2018-12-14T11:00:29.000Z", "currency"=>"NGN", "debit_currency"=>nil, "amount"=>500, "fee"=>45, "status"=>"FAILED", "reference"=>"MC-1d7ad363292b0c3a18cbccff891bd332", "meta"=>nil, "narration"=>"New transfer", "approver"=>nil, "complete_message"=>"DISBURSE FAILED: Insufficient funds", "requires_approval"=>0, "is_approved"=>1, "bank_name"=>"ACCESS BANK NIGERIA"}, {"id"=>4074, "account_number"=>"0690000044", "bank_code"=>"044", "fullname"=>"Mercedes Daniel", "date_created"=>"2018-12-13T21:24:50.000Z", "currency"=>"NGN", "debit_currency"=>nil, "amount"=>500, "fee"=>45, "status"=>"FAILED", "reference"=>"MC-96d44c562f077869953b63a0d86e8263", "meta"=>nil, "narration"=>"New transfer", "approver"=>nil, "complete_message"=>"DISBURSE FAILED: Insufficient funds", "requires_approval"=>0, "is_approved"=>1, "bank_name"=>"ACCESS BANK NIGERIA"}, {"id"=>4073, "account_number"=>"0690000044", "bank_code"=>"044", "fullname"=>"Mercedes Daniel", "date_created"=>"2018-12-13T21:16:08.000Z", "currency"=>"NGN", "debit_currency"=>nil, "amount"=>500, "fee"=>45, "status"=>"FAILED", "reference"=>"MC-510222befb79c0ac9d6aa6cb0010547a", "meta"=>nil, "narration"=>"New transfer", "approver"=>nil, "complete_message"=>"DISBURSE FAILED: Insufficient funds", "requires_approval"=>0, "is_approved"=>1, "bank_name"=>"ACCESS BANK NIGERIA"}, {"id"=>4072, "account_number"=>"0690000044", "bank_code"=>"044", "fullname"=>"Mercedes Daniel", "date_created"=>"2018-12-13T21:09:52.000Z", "currency"=>"NGN", "debit_currency"=>nil, "amount"=>500, "fee"=>45, "status"=>"FAILED", "reference"=>"MC-38e5c011326d88b67f2ae9fe39e94212", "meta"=>nil, "narration"=>"New transfer", "approver"=>nil, "complete_message"=>"DISBURSE FAILED: Insufficient funds", "requires_approval"=>0, "is_approved"=>1, "bank_name"=>"ACCESS BANK NIGERIA"}, {"id"=>4071, "account_number"=>"0690000044", "bank_code"=>"044", "fullname"=>"Mercedes Daniel", "date_created"=>"2018-12-13T20:59:21.000Z", "currency"=>"NGN", "debit_currency"=>nil, "amount"=>500, "fee"=>45, "status"=>"FAILED", "reference"=>"MC-9dbe233dc15abf647412670d965d9fce", "meta"=>nil, "narration"=>"New transfer", "approver"=>nil, "complete_message"=>"DISBURSE FAILED: Insufficient funds", "requires_approval"=>0, "is_approved"=>1, "bank_name"=>"ACCESS BANK NIGERIA"}, {"id"=>4070, "account_number"=>"0690000044", "bank_code"=>"044", "fullname"=>"Mercedes Daniel", "date_created"=>"2018-12-13T20:31:45.000Z", "currency"=>"NGN", "debit_currency"=>nil, "amount"=>500, "fee"=>45, "status"=>"FAILED", "reference"=>"MC-e2d49d7f68e48d80dfdab2871d14bda3", "meta"=>nil, "narration"=>"New transfer", "approver"=>nil, "complete_message"=>"DISBURSE FAILED: Insufficient funds", "requires_approval"=>0, "is_approved"=>1, "bank_name"=>"ACCESS BANK NIGERIA"}, {"id"=>4069, "account_number"=>"0690000044", "bank_code"=>"044", "fullname"=>"Mercedes Daniel", "date_created"=>"2018-12-13T20:22:50.000Z", "currency"=>"NGN", "debit_currency"=>nil, "amount"=>500, "fee"=>45, "status"=>"FAILED", "reference"=>"MC-5af02b704d1d66884f7e50fe7a81ba82", "meta"=>nil, "narration"=>"New transfer", "approver"=>nil, "complete_message"=>"DISBURSE FAILED: Insufficient funds", "requires_approval"=>0, "is_approved"=>1, "bank_name"=>"ACCESS BANK NIGERIA"}]}}
+}
+```
+
+### Full Transfer Flow
+
+```ruby
+require_relative './lib/rave_ruby'
+
+# This is a rave object which is expecting public and secret keys
+rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
+
+# This is used to initiate single transfer
+
+payload = {
+    "account_bank" => "044",
+    "account_number" => "0690000044",
+    "amount" => 500,
+    "narration" => "New transfer",
+    "currency" => "NGN",
+}
+
+transfer = Transfer.new(rave)
+
+response = transfer.initiate_transfer(payload)
+print response
+
+
+# # This is used to send bulk transfer
+
+# payload = {
+#     "title" => "test",
+#     "bulk_data" => [
+#         {
+#             "account_bank" => "044",
+#             "account_number" => "0690000044",
+#             "amount" => 500,
+#             "narration" => "Bulk Transfer 1",
+#             "currency" => "NGN",
+#             "reference" => "MC-bulk-reference-1"
+#         },
+#         {
+#             "account_bank" => "044",
+#             "account_number" => "0690000034",
+#             "amount" => 500,
+#             "narration" => "Bulk Transfer 2",
+#             "currency" => "NGN",
+#             "reference" => "MC-bulk-reference-1"
+#         }
+#     ]
+# }
+
+
+# transfer = Transfer.new(rave)
+
+# response = transfer.bulk_transfer(payload)
+# print response
+
+# This is used to get the transfer fee by taking in the currency
+response = transfer.get_fee("NGN")
+print response
+
+# This is used to get the balance by taking in the currency
+response = transfer.get_balance("NGN")
+print response
+
+# This is used to fetch a single transfer by passing in the transaction reference
+response = transfer.fetch("Bulk Transfer 2")
+print response
+
+# This is used to fetch all transfer
+response = transfer.fetch_all_transfers
+print response
+```
+
+## `UgandaMobileMoney.new(rave)`
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
@@ -1325,7 +1560,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rave_ruby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/MaestroJolly/rave_ruby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
@@ -1333,4 +1568,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the RaveRuby project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/rave_ruby/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the RaveRuby project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/MaestroJolly/rave_ruby/blob/master/CODE_OF_CONDUCT.md).
