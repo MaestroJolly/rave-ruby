@@ -1552,6 +1552,115 @@ print response
 
 ## `UgandaMobileMoney.new(rave)`
 
+To perform uganda mobile money transactions, instantiate the uganda mobile money object and pass rave object as its argument.
+
+Its functions includes:
+
+- `.initiate_charge`
+- `.verify_charge`
+
+### `.initiate_charge(payload)`
+
+This function is called to initiate uganda mobile money transaction. The payload should be a ruby hash with uganda mobile money details. Its parameters should include the following:
+
+- `amount`,
+
+- `email`,
+
+- `phonenumber`,
+
+- `network`,
+
+You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
+
+#### Sample uganda mobile money charge call:
+
+```ruby
+response = charge_uganda_mobile_money.initiate_charge(payload)
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+
+{
+    "error"=>false, "status"=>"success-pending-validation", "validation_required"=>true, "txRef"=>"MC-c716f37ff7c0f719c5976aaf239e11e1", "flwRef"=>"flwm3s4m0c1546503628014", "amount"=>30, "currency"=>"UGX", "validateInstruction"=>nil, "authModelUsed"=>"MOBILEMONEY", "paymentType"=>"mobilemoneygh"
+}
+
+```
+
+### `.verify_charge(txRef)`
+
+You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` call.
+
+#### Sample verify_charge call:
+
+```ruby
+response = charge_uganda_mobile_money.verify_charge(response["txRef"])
+```
+
+#### which returns:
+
+It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
+
+Full sample response returned if a transaction is successfully verified:
+
+```ruby
+{
+    "error"=>false, "transaction_complete"=>false, "data"=>{"txid"=>378423, "txref"=>"MC-c716f37ff7c0f719c5976aaf239e11e1", "flwref"=>"flwm3s4m0c1546503628014", "devicefingerprint"=>"N/A", "cycle"=>"one-time", "amount"=>30, "currency"=>"UGX", "chargedamount"=>30, "appfee"=>0.8, "merchantfee"=>0, "merchantbearsfee"=>1, "chargecode"=>"02", "chargemessage"=>"Pending Payment Validation", "authmodel"=>"MOBILEMONEY", "ip"=>"::ffff:10.65.63.158", "narration"=>"Simply Recharge", "status"=>"success-pending-validation", "vbvcode"=>"N/A", "vbvmessage"=>"N/A", "authurl"=>"NO-URL", "acctcode"=>nil, "acctmessage"=>nil, "paymenttype"=>"mobilemoneygh", "paymentid"=>"N/A", "fraudstatus"=>"ok", "chargetype"=>"normal", "createdday"=>4, "createddayname"=>"THURSDAY", "createdweek"=>1, "createdmonth"=>0, "createdmonthname"=>"JANUARY",
+"createdquarter"=>1, "createdyear"=>2019, "createdyearisleap"=>false, "createddayispublicholiday"=>0, "createdhour"=>8, "createdminute"=>20, "createdpmam"=>"am", "created"=>"2019-01-03T08:20:27.000Z", "customerid"=>66732, "custphone"=>"054709929300", "custnetworkprovider"=>"UNKNOWN PROVIDER", "custname"=>"Edward Kisane", "custemail"=>"tester@flutter.co", "custemailprovider"=>"COMPANY EMAIL", "custcreated"=>"2018-12-03T11:33:23.000Z", "accountid"=>6076, "acctbusinessname"=>"Simply Recharge", "acctcontactperson"=>"Jolaoso Yusuf", "acctcountry"=>"NG", "acctbearsfeeattransactiontime"=>1, "acctparent"=>1, "acctvpcmerchant"=>"N/A", "acctalias"=>nil, "acctisliveapproved"=>0, "orderref"=>"URF_MMGH_1546503627253_1491735", "paymentplan"=>nil, "paymentpage"=>nil, "raveref"=>nil, "meta"=>[]}
+}
+```
+
+If the `chargecode` returned is `02`, it means the transaction is still pending validation else if it returns `00`, it means the transaction is successfully completed.
+
+#### Full Uganda Mobile Money Transaction Flow:
+
+```ruby
+
+require_relative './lib/rave_ruby'
+
+
+# This is a rave object which is expecting public and secret keys
+rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
+
+
+# This is used to perform mobile money charge
+
+payload = {
+    "amount" => "30",
+    "phonenumber" => "054709929300",
+    "firstname" => "Edward",
+    "lastname" => "Kisane",
+    "network" => "UGX",
+    "email" => "tester@flutter.co",
+    "IP" => '103.238.105.185',
+    "redirect_url" => "https://webhook.site/6eb017d1-c605-4faa-b543-949712931895",
+}
+
+# To initiate uganda mobile money transaction
+charge_uganda_mobile_money = UgandaMobileMoney.new(rave)
+
+response = charge_uganda_mobile_money.initiate_charge(payload)
+
+print response
+
+# To verify the mobile money transaction
+response = charge_uganda_mobile_money.verify_charge(response["txRef"])
+
+print response
+
+```
+
+## `Ussd.new(rave)`
+
+`NOTE:` This option is currently unavailable.
+
+## `ListBanks.new(rave)`
+
+This function is called to fetch and return a list of banks currently supported by rave.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
