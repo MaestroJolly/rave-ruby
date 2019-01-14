@@ -40,6 +40,7 @@ class ChargeBase < Base
   def handle_charge_response (response)
 
     charge_response = response
+    # print charge_response
     flwRef = charge_response["data"]["flwRef"]
     txRef = charge_response["data"]["txRef"]
     # status = charge_response["data"]["status"]

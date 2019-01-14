@@ -63,7 +63,7 @@ RSpec.describe SubAccount do
     end
 
     it 'should check if a single sub account is successfully deleted with sub account id' do
-      delete_subaccount_response = delete.delete_subaccount("RS_A59429B9C94C5A862F731711290B9ADD")
+      delete_subaccount_response = subaccount.delete_subaccount("RS_A59429B9C94C5A862F731711290B9ADD")
       expect(delete_subaccount_response["error"]).to eq(false)
     end
   end

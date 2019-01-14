@@ -3,8 +3,8 @@ require 'spec_helper'
 # test_public_key = "FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X" 
 # test_secret_key = "FLWSECK-xxxxxxxxxxxxxxxxxxxxx-X"
 
-# invalid_test_public_key = "xxxxxxxxxxxxxxxxxxxxx-X" 
-# invalid_test_secret_key = "xxxxxxxxxxxxxxxxxxxxx-X"
+invalid_test_public_key = "xxxxxxxxxxxxxxxxxxxxx-X" 
+invalid_test_secret_key = "xxxxxxxxxxxxxxxxxxxxx-X"
 
 RSpec.describe RaveRuby do
 

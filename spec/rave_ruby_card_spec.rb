@@ -23,6 +23,51 @@ payload = {
   "device_fingerprint" => "69e6b7f0b72037aa8428b70fbe03986c"
 }
 
+incomplete_card_payload = {
+  # "cardno" => "5438898014560229",
+  "cvv" => "890",
+  "expirymonth" => "09",
+  "expiryyear" => "19",
+  "currency" => "NGN",
+  "country" => "NG",
+  "amount" => "10",
+  "email" => "user@gmail.com",
+  "phonenumber" => "0902620185",
+  "firstname" => "temi",
+  "lastname" => "desola",
+  "IP" => "355426087298442",
+  "meta" => [{"metaname": "flightID", "metavalue": "123949494DC"}],
+  "redirect_url" => "https://rave-webhook.herokuapp.com/receivepayment",
+  "device_fingerprint" => "69e6b7f0b72037aa8428b70fbe03986c"
+}
+
+token_payload = {
+    "currency" => "NGN",
+    "country" => "NG",
+    "amount" => "10",
+    "token" => "flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k",
+    "email" => "user@gmail.com",
+    "phonenumber" => "0902620185",
+    "firstname" => "temi",
+    "lastname" => "desola",
+    "IP" => "355426087298442",
+    "meta" => [{"metaname": "flightID", "metavalue": "123949494DC"}],
+    "redirect_url" => "https://rave-webhook.herokuapp.com/receivepayment",
+}
+
+incomplete_token_payload = {
+    "currency" => "NGN",
+    "country" => "NG",
+    "amount" => "10",
+    "email" => "user@gmail.com",
+    "phonenumber" => "0902620185",
+    "firstname" => "temi",
+    "lastname" => "desola",
+    "IP" => "355426087298442",
+    "meta" => [{"metaname": "flightID", "metavalue": "123949494DC"}],
+    "redirect_url" => "https://rave-webhook.herokuapp.com/receivepayment",
+}
+
 pin_payload = {
   "cardno" => "5438898014560229",
   "cvv" => "890",
@@ -75,6 +120,22 @@ RSpec.describe Card do
     it "should return a card object" do
       expect(charge_card.nil?).to eq(false)
     end
+
+    it 'should raise Error if card payload is incomplete' do
+      begin
+        incomplete_card_payload_response = charge_card.initiate_charge(incomplete_card_payload)
+      rescue  => e
+        expect(e.instance_of? IncompleteParameterError).to eq true
+      end
+    end
+
+    it 'should raise Error if card token payload is incomplete' do
+      begin
+        incomplete_payload_response = charge_card.tokenized_charge(incomplete_token_payload)
+      rescue  => e
+        expect(e.instance_of? IncompleteParameterError).to eq true
+      end
+    end
   
     it 'should check if authentication is required after charging a card' do
       first_payload_response = charge_card.initiate_charge(payload)
@@ -102,6 +163,12 @@ RSpec.describe Card do
       card_validate_response = charge_card.validate_charge(card_initiate_response["flwRef"], "12345")
       card_verify_response = charge_card.verify_charge(card_validate_response["txRef"])
       expect(card_verify_response["data"]["chargecode"]).to eq("00")
+    end
+
+    it 'should return chargecode 00 after successfully charging and verifying a tokenized card transaction with txRef' do
+      token_initiate_response = charge_card.tokenized_charge(token_payload)
+      token_verify_response = charge_card.verify_charge(token_initiate_response["txRef"])
+      expect(token_verify_response["data"]["chargecode"]).to eq("00")
     end
 
   end

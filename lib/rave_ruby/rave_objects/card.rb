@@ -16,6 +16,9 @@ class Card < ChargeBase
 
         data.merge!({"PBFPubKey" => public_key})
 
+        required_parameters = ["PBFPubKey", "cardno", "cvv", "expirymonth", "expiryyear", "amount", "txRef", "email"]
+        check_passed_parameters(required_parameters, data)
+
         encrypt_data = Util.encrypt(hashed_secret_key, data)
 
         payload = {
@@ -27,6 +30,29 @@ class Card < ChargeBase
         payload = payload.to_json
 
         response = post_request("#{base_url}#{BASE_ENDPOINTS::CHARGE_ENDPOINT}", payload) 
+
+        return handle_charge_response(response)
+    end
+
+    # method to initiate card charge 
+    def tokenized_charge(data)
+        base_url = rave_object.base_url
+        hashed_secret_key = get_hashed_key
+        public_key = rave_object.public_key
+        
+        # only update the payload with the transaction reference if it isn't already added to the payload
+        if !data.key?("txRef")
+            data.merge!({"txRef" => Util.transaction_reference_generator})
+        end
+
+        data.merge!({"SECKEY" => rave_object.secret_key.dup})
+
+        required_parameters = ["SECKEY", "amount", "currency", "country", "token", "txRef", "email"]
+        check_passed_parameters(required_parameters, data)
+
+        payload = data.to_json
+
+        response = post_request("#{base_url}#{BASE_ENDPOINTS::TOKENISED_CHARGE_ENDPOINT}", payload) 
 
         return handle_charge_response(response)
     end

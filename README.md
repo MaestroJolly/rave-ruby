@@ -250,6 +250,7 @@ Its functions includes:
 - `.initiate_charge`
 - `.get_auth_type`
 - `.update_payload`
+- `.tokenized_charge`
 - `.validate_charge`
 - `.verify_charge`
 
@@ -412,6 +413,66 @@ Full sample response returned if a transaction is successfully verified:
 }
 ```
 
+`NOTE:` You can tokenize a card after charging the card for the first time for subsequent transactions done with the card without having to send the card details everytime a transaction is done. The card token can be gotten from the `.verify_charge` response, here's how to get the card token from our sample verify response:
+
+`response['card']['card_tokens']['embed_tokens']` which is similar to this: `flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k`
+
+### `.tokenized_charge(payload)`
+
+This function is called to perform a charge a tokenized card. Its payload includes;
+
+- `token`,
+
+- `country`,
+
+- `amount`,
+
+- `email`,
+
+- `firstname`,
+
+- `lastname`,
+
+- `txRef`,
+
+- `currency`
+
+#### Sample tokenized charge call:
+
+```ruby
+response = charge_card.tokenized_charge(payload)
+```
+
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+{
+    "error"=>false, "status"=>"success", "validation_required"=>false, "message"=>"Charge success", "suggested_auth"=>nil, "txRef"=>"MC-f1085c1793bfaf171e667a21be6ec121", "flwRef"=>"FLW-M03K-218f54e6a06dc7da152f115c561f32d2", "chargeResponseCode"=>"00", "chargeResponseMessage"=>"Approved", "amount"=>10, "currency"=>"NGN", "validateInstruction"=>nil, "paymentType"=>"card", "authModelUsed"=>"noauth", "authurl"=>"N/A"
+}
+
+```
+You can now verify the transaction by calling the `.verify_charge` function to verify the transaction and get the full response of the transaction.
+
+#### Sample verify_charge call:
+
+```ruby
+response = charge_card.verify_charge(response["txRef"])
+```
+
+#### which returns:
+
+It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
+
+Full sample response returned if a transaction is successfully verified:
+
+```ruby
+{
+    "error"=>false, "transaction_complete"=>true, "data"=>{"txid"=>390050, "txref"=>"MC-f1085c1793bfaf171e667a21be6ec121", "flwref"=>"FLW-M03K-218f54e6a06dc7da152f115c561f32d2", "devicefingerprint"=>"N/A", "cycle"=>"one-time", "amount"=>10, "currency"=>"NGN", "chargedamount"=>10, "appfee"=>0.14, "merchantfee"=>0, "merchantbearsfee"=>1, "chargecode"=>"00", "chargemessage"=>"Approved", "authmodel"=>"noauth", "ip"=>"355426087298442", "narration"=>"Simply Recharge", "status"=>"successful", "vbvcode"=>"00", "vbvmessage"=>"Approved", "authurl"=>"N/A", "acctcode"=>nil, "acctmessage"=>nil, "paymenttype"=>"card", "paymentid"=>"861", "fraudstatus"=>"ok", "chargetype"=>"normal", "createdday"=>1, "createddayname"=>"MONDAY", "createdweek"=>3, "createdmonth"=>0, "createdmonthname"=>"JANUARY", "createdquarter"=>1, "createdyear"=>2019, "createdyearisleap"=>false, "createddayispublicholiday"=>0, "createdhour"=>12, "createdminute"=>57, "createdpmam"=>"pm", "created"=>"2019-01-14T12:57:33.000Z", "customerid"=>51655, "custphone"=>"0902620185", "custnetworkprovider"=>"AIRTEL", "custname"=>"temi desola", "custemail"=>"user@gmail.com", "custemailprovider"=>"GMAIL", "custcreated"=>"2018-09-24T07:59:14.000Z", "accountid"=>6076, "acctbusinessname"=>"Simply Recharge", "acctcontactperson"=>"Jolaoso Yusuf", "acctcountry"=>"NG", "acctbearsfeeattransactiontime"=>1, "acctparent"=>1, "acctvpcmerchant"=>"N/A", "acctalias"=>nil, "acctisliveapproved"=>0, "orderref"=>"URF_86BFB6FF6B6BB6CD6C9E", "paymentplan"=>nil, "paymentpage"=>nil, "raveref"=>nil, "amountsettledforthistransaction"=>9.86, "card"=>{"expirymonth"=>"09", "expiryyear"=>"19", "cardBIN"=>"543889", "last4digits"=>"0229", "brand"=>"MASHREQ BANK CREDITSTANDARD", "card_tokens"=>[{"embedtoken"=>"flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k", "shortcode"=>"671c0", "expiry"=>"9999999999999"}], "type"=>"MASTERCARD", "life_time_token"=>"flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k"}, "meta"=>[{"id"=>1263976, "metaname"=>"flightID", "metavalue"=>"123949494DC", "createdAt"=>"2019-01-14T12:57:33.000Z", "updatedAt"=>"2019-01-14T12:57:33.000Z", "deletedAt"=>nil, "getpaidTransactionId"=>390050}]}
+}
+```
+
 If a transaction couldn't be verified successfully, `error` and `transaction_complete` would both come as `false`.
 
 #### Full Card Transaction Flow:
@@ -476,10 +537,6 @@ response = charge_card.verify_charge(response["txRef"])
 print response
 
 ```
-
-`NOTE:` You can tokenize a card after charging the card for the first time for subsequent transactions done with the card without having to send the card details everytime a transaction is done. The card token can be gotten from the `.verify_charge` response, here's how to get the card token from our sample verify response:
-
-`response['card']['card_tokens']['embed_tokens']` which is similar to this: `flw-t1nf-75aa4a20695a54c1846e0e8bcae754ee-m03k`
 
 ## `Preauth.new(rave)`
 
