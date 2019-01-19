@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = RaveRuby::VERSION
   spec.authors       = ["MaestroJolly"]
   spec.email         = ["jolaosoyusuf@gmail.com"]
-
+  spec.date        = '2019-01-19'
   spec.summary       = %q{Ruby Gem For Rave Payments By Flutterwave.}
   spec.description   = %q{This is the official Ruby Gem For Rave Payments which includes Card, Account, Transfer, Subaccount, Subscription, Mpesa, Ghana Mobile Money, Ussd, Payment Plans, and Transfer payment methods.}
   spec.homepage      = "https://github.com/MaestroJolly/rave-ruby"
@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+    # spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
     spec.metadata["homepage_uri"] = spec.homepage
     spec.metadata["source_code_uri"] = spec.homepage
@@ -40,6 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.2"
 
-
-  spec.add_runtime_dependency 'httparty', '~> 0.16.2'
+  # Dependencies
+  spec.required_ruby_version = ">= 2.5.3"
+  spec.add_runtime_dependency 'httparty', '~> 0.16.3'
 end

@@ -99,7 +99,8 @@ class Base
         return response
     else
         response = {"error" => true, "data" => JSON.parse(list_bank.body)}
-        raise InitiateTransferError, response
+        return response
+        # raise InitiateTransferError, response
     end
   end
 end

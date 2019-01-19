@@ -1,6 +1,6 @@
-require_relative "./rave_ruby/rave_modules/base_endpoints"
+require_relative "rave_ruby/rave_modules/base_endpoints"
 require_relative "rave_ruby/rave_objects/base/base"
-require_relative "./rave_ruby/rave_modules/util"
+require_relative "rave_ruby/rave_modules/util"
 require_relative "rave_ruby/rave_objects/list_banks"
 require_relative "rave_ruby/rave_objects/card"
 require_relative "rave_ruby/rave_objects/account"
