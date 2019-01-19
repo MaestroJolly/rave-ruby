@@ -1,5 +1,7 @@
 # RaveRuby
 
+[![Build Status](https://travis-ci.org/MaestroJolly/rave-ruby.svg?branch=master)](https://travis-ci.org/MaestroJolly/rave-ruby) [![Gem Version](https://badge.fury.io/rb/rave_ruby.svg)](https://badge.fury.io/rb/rave_ruby)
+
 This is a ruby gem for easy integration of Rave API for various applications written in ruby language from [Rave](https://rave.flutterwave.com) by [Flutterwave.](https://developer.flutterwave.com/reference)
 
 ## Documentation
@@ -198,7 +200,7 @@ If a transaction couldn't be verified successfully, `error` and `transaction_com
 #### Full Account Transaction Flow:
 
 ```ruby
-require_relative './lib/rave_ruby'
+require 'rave_ruby'
 
 # This is a rave object which is expecting public and secret keys
 
@@ -479,7 +481,7 @@ If a transaction couldn't be verified successfully, `error` and `transaction_com
 
 ```ruby
 
-require_relative './lib/rave_ruby'
+require 'rave_ruby'
 
 # This is a rave object which is expecting public and secret keys
 rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
@@ -660,7 +662,7 @@ REFERENCE", "paymenttype"=>"card", "paymentid"=>"861", "fraudstatus"=>"ok", "cha
 #### Full Preauth Transaction Flow:
 
 ```ruby
-require_relative './lib/rave_ruby'
+require 'rave_ruby'
 
 
 # This is a rave object which is expecting public and secret keys
@@ -779,7 +781,7 @@ If a transaction couldn't be verified successfully, `error` and `transaction_com
 
 ```ruby
 
-require_relative './lib/rave_ruby'
+require 'rave_ruby'
 
 
 # This is a rave object which is expecting public and secret keys
@@ -880,7 +882,7 @@ If a transaction couldn't be verified successfully, `error` and `transaction_com
 
 ```ruby
 
-require_relative './lib/rave_ruby'
+require 'rave_ruby'
 
 
 # This is a rave object which is expecting public and secret keys
@@ -1033,7 +1035,7 @@ It returns this response in ruby hash. A sample response:
 
 ```ruby
 
-require_relative './lib/rave_ruby'
+require 'rave_ruby'
 
 
 # This is a rave object which is expecting public and secret keys
@@ -1230,7 +1232,7 @@ It returns this response in ruby hash. A sample response:
 
 ```ruby
 
-require_relative './lib/rave_ruby'
+require 'rave_ruby'
 
 
 # This is a rave object which is expecting public and secret keys
@@ -1356,7 +1358,7 @@ It returns this response in ruby hash. A sample response:
 ### Full Subscription Flow
 
 ```ruby
-require_relative './lib/rave_ruby'
+require 'rave_ruby'
 
 # This is a rave object which is expecting public and secret keys
 rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
@@ -1539,7 +1541,7 @@ It returns this response in ruby hash. A sample response:
 ### Full Transfer Flow
 
 ```ruby
-require_relative './lib/rave_ruby'
+require 'rave_ruby'
 
 # This is a rave object which is expecting public and secret keys
 rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
@@ -1676,7 +1678,7 @@ If the `chargecode` returned is `02`, it means the transaction is still pending 
 
 ```ruby
 
-require_relative './lib/rave_ruby'
+require 'rave_ruby'
 
 
 # This is a rave object which is expecting public and secret keys
