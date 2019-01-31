@@ -510,8 +510,6 @@ charge_card = Card.new(rave)
 
 response = charge_card.initiate_charge(payload)
 
-print response
-
 # update payload with suggested auth
 if response["suggested_auth"]
     suggested_auth = response["suggested_auth"]
@@ -521,16 +519,18 @@ if response["suggested_auth"]
     elsif auth_arg == :address
         updated_payload = charge_card.update_payload(suggested_auth, payload, address:{"billingzip"=> "07205", "billingcity"=> "Hillside", "billingaddress"=> "470 Mundet PI", "billingstate"=> "NJ", "billingcountry"=> "US"})
     end
-end
 
-#  perform the second charge after payload is updated with suggested auth
-response = charge_card.initiate_charge(updated_payload)
-print response
+    #  perform the second charge after payload is updated with suggested auth
+    response = charge_card.initiate_charge(updated_payload)
+    print response
 
-# perform validation if it is required
-
-if response["validation_required"]
-    response = charge_card.validate_charge(response["flwRef"], "12345")
+    # perform validation if it is required
+    if response["validation_required"]
+        response = charge_card.validate_charge(response["flwRef"], "12345")
+        print response
+    end
+else
+    # You can handle the get the auth url from this response and load it for the customer to complete the transaction if an auth url is returned in the response.
     print response
 end
 
