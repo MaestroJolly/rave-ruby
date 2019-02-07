@@ -67,6 +67,7 @@ rave = RaveRuby.new("YOUR_RAVE_LIVE_PUBLIC_KEY", "YOUR_RAVE_LIVE_SECRET_KEY", tr
 - [Subscription.new(rave)](#subscriptionnewrave)
 - [Transfer.new(rave)](#transfernewrave)
 - [UgandaMobileMoney.new(rave)](#ugandamobilemoneynewrave)
+- [ZambiaMobileMoney.new(rave)](#zambiamobilemoneynewrave)
 - [Ussd.new(rave)](#ussdnewrave)
 - [ListBanks.new(rave)](#listbanksnewrave)
 
@@ -1298,18 +1299,20 @@ It returns this response in ruby hash. A sample response:
 
 ```ruby
 {
-    "error"=>false, "status"=>"success", "message"=>"SUBSCRIPTIONS-FETCHED", "data"=>{"page_info"=>{"total"=>0, "current_page"=>0, "total_pages"=>0}, "plansubscriptions"=>[]}, "plansubscriptions"=>[]
+    "error"=>false, "status"=>"success", "message"=>"SUBSCRIPTIONS-FETCHED", "data"=>{"page_info"=>{"total"=>6, "current_page"=>1, "total_pages"=>1}, "plansubscriptions"=>[{"id"=>1785, "amount"=>100, "customer"=>{"id"=>83207, "customer_email"=>"horozex@ace-mail.net"}, "plan"=>1296, "status"=>"cancelled",
+    "date_created"=>"2019-02-06T21:03:21.000Z"}, {"id"=>1726, "amount"=>100, "customer"=>{"id"=>51655, "customer_email"=>"user@gmail.com"}, "plan"=>1296, "status"=>"cancelled", "date_created"=>"2019-01-29T08:58:38.000Z"}, {"id"=>1724, "amount"=>100, "customer"=>{"id"=>51655, "customer_email"=>"user@gmail.com"}, "plan"=>1296, "status"=>"cancelled", "date_created"=>"2019-01-28T17:16:46.000Z"}, {"id"=>1720,
+    "amount"=>100, "customer"=>{"id"=>51655, "customer_email"=>"user@gmail.com"}, "plan"=>1296, "status"=>"cancelled", "date_created"=>"2019-01-26T17:15:36.000Z"}, {"id"=>1719, "amount"=>100, "customer"=>{"id"=>51655, "customer_email"=>"user@gmail.com"}, "plan"=>1296, "status"=>"cancelled", "date_created"=>"2019-01-26T15:13:07.000Z"}, {"id"=>1533, "amount"=>100, "customer"=>{"id"=>73332, "customer_email"=>"jolaosoyusuf16@gmail.com"}, "plan"=>1296, "status"=>"active", "date_created"=>"2018-12-29T11:47:45.000Z"}]}, "plansubscriptions"=>[{"id"=>1785, "amount"=>100, "customer"=>{"id"=>83207, "customer_email"=>"horozex@ace-mail.net"}, "plan"=>1296, "status"=>"cancelled", "date_created"=>"2019-02-06T21:03:21.000Z"}, {"id"=>1726, "amount"=>100, "customer"=>{"id"=>51655, "customer_email"=>"user@gmail.com"}, "plan"=>1296, "status"=>"cancelled", "date_created"=>"2019-01-29T08:58:38.000Z"}, {"id"=>1724, "amount"=>100, "customer"=>{"id"=>51655, "customer_email"=>"user@gmail.com"}, "plan"=>1296, "status"=>"cancelled", "date_created"=>"2019-01-28T17:16:46.000Z"}, {"id"=>1720, "amount"=>100, "customer"=>{"id"=>51655, "customer_email"=>"user@gmail.com"}, "plan"=>1296, "status"=>"cancelled", "date_created"=>"2019-01-26T17:15:36.000Z"}, {"id"=>1719, "amount"=>100, "customer"=>{"id"=>51655, "customer_email"=>"user@gmail.com"}, "plan"=>1296, "status"=>"cancelled", "date_created"=>"2019-01-26T15:13:07.000Z"}, {"id"=>1533, "amount"=>100, "customer"=>{"id"=>73332, "customer_email"=>"jolaosoyusuf16@gmail.com"}, "plan"=>1296, "status"=>"active", "date_created"=>"2018-12-29T11:47:45.000Z"}]
 }
 ```
 
-### `.fetch_subscription("subscription_id", "subscription_email")`
+### `.fetch_subscription(transaction_id)`
 
-This function is called to fetch a single subscription taking the subscription id and subscription email as its arguments.
+This function is called to fetch a single subscription by taking the transaction id from a successful charge or verify response as its arguments.
 
 #### Sample fetch_subscription call:
 
 ```ruby
-response = subscription.fetch_subscription("1", "test@test.com")
+response = subscription.fetch_subscription("426082")
 ```
 #### which returns:
 
@@ -1317,42 +1320,72 @@ It returns this response in ruby hash. A sample response:
 
 ```ruby
 {
-    "error"=>false, "status"=>"success", "message"=>"SUBSCRIPTIONS-FETCHED", "data"=>{"page_info"=>{"total"=>0, "current_page"=>0, "total_pages"=>0}, "plansubscriptions"=>[]}
+    "error"=>false, "status"=>"success", "message"=>"SUBSCRIPTIONS-FETCHED", "data"=>{"page_info"=>{"total"=>1, "current_page"=>1, "total_pages"=>1}, "plansubscriptions"=>[{"id"=>1794, "amount"=>100, "customer"=>{"id"=>51655, "customer_email"=>"user@gmail.com"}, "plan"=>1296, "status"=>"active", "date_created"=>"2019-02-07T16:04:34.000Z"}]}
 }
 ```
 
-### `.activate_subscription("subscription_id")`
+### `.activate_subscription(transaction_id)`
 
-This function is called to activate a subscription taking the subscription id as its argument.
+This function is called to activate a subscription by taking the transaction id from a successful charge or verify response as its arguments.
 
 #### Sample activate_subscription call:
 
 ```ruby
-response = subscription.activate_subscription(1533)
+response = subscription.activate_subscription(426082)
 ```
 #### which returns:
 
 It returns this response in ruby hash. A sample response:
 
 ```ruby
-
+{
+  "error"=>false,
+  "status"=> "success",
+  "message"=> "SUBSCRIPTION-ACTIVATED",
+  "data"=> {
+    "id"=> 1794,
+    "amount"=> 100,
+    "customer"=> {
+      "id"=> 51655,
+      "customer_email"=> "user@gmail.com"
+    },
+    "plan"=> 1296,
+    "status"=> "active",
+    "date_created"=> "2019-02-07T16:04:34.000Z"
+  }
+}
 ```
 
-### `.cancel_subscription("subscription_id")`
+### `.cancel_subscription(transaction_id)`
 
-This function is called to cancel a subscription taking the subscription id as its argument.
+This function is called to cancel a subscription by taking the transaction id from a successful charge or verify response as its arguments.
 
 #### Sample cancel_subscription call:
 
 ```ruby
-response = subscription.cancel_subscription(1533)
+response = subscription.cancel_subscription(426082)
 ```
 #### which returns:
 
 It returns this response in ruby hash. A sample response:
 
 ```ruby
-
+{
+  "error"=>false,
+  "status" => "success",
+  "message"=> "SUBSCRIPTION-CANCELLED",
+  "data"=> {
+    "id"=> 1794,
+    "amount"=> 100,
+    "customer"=> {
+      "id"=> 51655,
+      "customer_email"=> "user@gmail.com"
+    },
+    "plan"=> 1296,
+    "status"=> "cancelled",
+    "date_created"=> "2019-02-07T16:04:34.000Z"
+  }
+}
 ```
 
 ### Full Subscription Flow
@@ -1366,7 +1399,7 @@ rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxx
 subscription = Subscription.new(rave)
 response = subscription.list_all_subscription
 print response
-response = subscription.fetch_subscription("1", "test@test.com")
+response = subscription.fetch_subscription("1")
 print response
 response = subscription.activate_subscription(1533)
 print response
@@ -1707,6 +1740,109 @@ print response
 
 # To verify the mobile money transaction
 response = charge_uganda_mobile_money.verify_charge(response["txRef"])
+
+print response
+
+```
+
+## `ZambiaMobileMoney.new(rave)`
+
+To perform zambia mobile money transactions, instantiate the zambia mobile money object and pass rave object as its argument.
+
+Its functions includes:
+
+- `.initiate_charge`
+- `.verify_charge`
+
+### `.initiate_charge(payload)`
+
+This function is called to initiate zambia mobile money transaction. The payload should be a ruby hash with uganda mobile money details. Its parameters should include the following:
+
+- `amount`,
+
+- `email`,
+
+- `phonenumber`,
+
+- `network`,
+
+You can also add your custom transaction reference `(txRef)`, if not, one would be automatically generated for you in which we used the ruby `securerandom` module for generating this in the `Util` module.
+
+#### Sample zambia mobile money charge call:
+
+```ruby
+response = charge_zambia_mobile_money.initiate_charge(payload)
+```
+#### which returns:
+
+It returns this response in ruby hash. A sample response:
+
+```ruby
+
+{
+    "error"=>false, "status"=>"success-pending-validation", "validation_required"=>true, "txRef"=>"MC-bed3093128cd133623ad3cc7cbfc22b2", "flwRef"=>"flwm3s4m0c1549542975743", "amount"=>30, "currency"=>"ZMW", "validateInstruction"=>nil, "authModelUsed"=>"MOBILEMONEY", "paymentType"=>"mobilemoneyzm"
+}
+
+```
+
+### `.verify_charge(txRef)`
+
+You can call the `verify_charge` function to check if your transaction was completed successfully. To do this, you have to pass the transaction reference generated at the point of making your charge call. This is the txRef in the response parameter returned in any of the `initiate_charge` call.
+
+#### Sample verify_charge call:
+
+```ruby
+response = charge_zambia_mobile_money.verify_charge(response["txRef"])
+```
+
+#### which returns:
+
+It returns this response in ruby hash with the `txRef`, `flwRef` and `transaction_complete` which indicates the transaction is successfully completed.
+
+Full sample response returned if a transaction is successfully verified:
+
+```ruby
+{
+    "error"=>false, "transaction_complete"=>false, "data"=>{"txid"=>425673, "txref"=>"MC-bed3093128cd133623ad3cc7cbfc22b2", "flwref"=>"flwm3s4m0c1549542975743", "devicefingerprint"=>"N/A", "cycle"=>"one-time", "amount"=>30, "currency"=>"ZMW", "chargedamount"=>30, "appfee"=>0.42, "merchantfee"=>0, "merchantbearsfee"=>1, "chargecode"=>"02", "chargemessage"=>"Pending Payment Validation", "authmodel"=>"MOBILEMONEY", "ip"=>"::ffff:10.63.225.86", "narration"=>"Simply Recharge", "status"=>"success-pending-validation", "vbvcode"=>"N/A", "vbvmessage"=>"N/A", "authurl"=>"NO-URL", "acctcode"=>nil, "acctmessage"=>nil, "paymenttype"=>"mobilemoneyzm", "paymentid"=>"N/A", "fraudstatus"=>"ok", "chargetype"=>"normal", "createdday"=>4, "createddayname"=>"THURSDAY", "createdweek"=>6, "createdmonth"=>1, "createdmonthname"=>"FEBRUARY", "createdquarter"=>1, "createdyear"=>2019, "createdyearisleap"=>false, "createddayispublicholiday"=>0, "createdhour"=>12, "createdminute"=>36, "createdpmam"=>"pm", "created"=>"2019-02-07T12:36:15.000Z", "customerid"=>83416, "custphone"=>"054709929300", "custnetworkprovider"=>"UNKNOWN PROVIDER",
+    "custname"=>"John Doe", "custemail"=>"user@example.com", "custemailprovider"=>"COMPANY EMAIL", "custcreated"=>"2019-02-07T12:36:14.000Z", "accountid"=>6076, "acctbusinessname"=>"Simply Recharge", "acctcontactperson"=>"Jolaoso Yusuf", "acctcountry"=>"NG", "acctbearsfeeattransactiontime"=>1, "acctparent"=>1, "acctvpcmerchant"=>"N/A", "acctalias"=>nil, "acctisliveapproved"=>0, "orderref"=>"URF_MMGH_1549542975097_8307535", "paymentplan"=>nil, "paymentpage"=>nil, "raveref"=>nil, "meta"=>[]}
+}
+```
+
+If the `chargecode` returned is `02`, it means the transaction is still pending validation else if it returns `00`, it means the transaction is successfully completed.
+
+#### Full Zambia Mobile Money Transaction Flow:
+
+```ruby
+
+require 'rave_ruby'
+
+
+# This is a rave object which is expecting public and secret keys
+rave = RaveRuby.new("FLWPUBK-xxxxxxxxxxxxxxxxxxxxx-X", "FLWSECK-xxxxxxxxxxxxxxxxxxxx-X")
+
+
+# This is used to perform zambia mobile money charge
+
+payload = {
+    "amount" => "30",
+    "phonenumber" => "054709929300",
+    "firstname" => "John",
+    "lastname" => "Doe",
+    "network" => "MTN",
+    "email" => "user@example.com",
+    "IP" => '355426087298442',
+    "redirect_url" => "https://webhook.site/6eb017d1-c605-4faa-b543-949712931895",
+}
+
+# To initiate zambia mobile money transaction
+charge_zambia_mobile_money = ZambiaMobileMoney.new(rave)
+
+response = charge_zambia_mobile_money.initiate_charge(payload)
+
+print response
+
+# To verify the zambia mobile money transaction
+response = charge_zambia_mobile_money.verify_charge(response["txRef"])
 
 print response
 

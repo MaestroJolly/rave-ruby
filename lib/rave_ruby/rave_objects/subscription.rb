@@ -13,15 +13,15 @@ class Subscription < SubscriptionBase
 
     #method to fetch a subscription
 
-    def fetch_subscription(id, email)
+    def fetch_subscription(trans_id)
         base_url = rave_object.base_url
         secret_key = rave_object.secret_key.dup
 
-        response = get_request("#{base_url}#{BASE_ENDPOINTS::SUBSCRIPTIONS_ENDPOINT}/query",{"seckey" => rave_object.secret_key.dup, "id" => id, "email": email})
+        response = get_request("#{base_url}#{BASE_ENDPOINTS::SUBSCRIPTIONS_ENDPOINT}/query",{"seckey" => rave_object.secret_key.dup, "transaction_id" => trans_id})
         return handle_fetch_subscription_response(response)
     end 
 
-    def cancel_subscription(id)
+    def cancel_subscription(trans_id)
         base_url = rave_object.base_url
         secret_key = rave_object.secret_key.dup
 
@@ -30,11 +30,11 @@ class Subscription < SubscriptionBase
         }
 
         payload = payload.to_json
-        response = post_request("#{base_url}#{BASE_ENDPOINTS::SUBSCRIPTIONS_ENDPOINT}/#{id}/cancel",payload)
-        return handle_cancel_response(response)
+        response = post_request("#{base_url}#{BASE_ENDPOINTS::SUBSCRIPTIONS_ENDPOINT}/#{trans_id}/cancel?fetch_by_tx=1",payload)
+        return handle_cancel_subscription_response(response)
     end
 
-    def activate_subscription(id)
+    def activate_subscription(trans_id)
 
         base_url = rave_object.base_url
         secret_key = rave_object.secret_key.dup
@@ -45,7 +45,7 @@ class Subscription < SubscriptionBase
             "seckey" => secret_key,
         }
         payload = payload.to_json
-        response = post_request("#{base_url}#{BASE_ENDPOINTS::SUBSCRIPTIONS_ENDPOINT}/#{id}/activate",payload)
+        response = post_request("#{base_url}#{BASE_ENDPOINTS::SUBSCRIPTIONS_ENDPOINT}/#{trans_id}/activate?fetch_by_tx=1",payload)
         return handle_activate_subscription_response(response)
     end
 end
