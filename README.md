@@ -91,6 +91,10 @@ This function is called to initiate account transaction. The payload should be a
 
 - `amount`,
 
+- `country`,
+
+- `currency`,
+
 - `email`,
 
 - `phonenumber`,
@@ -264,6 +268,10 @@ This function is called to initiate card transaction. The payload should be a ru
 - `cardno`,
 
 - `cvv`,
+
+- `country`,
+
+- `currency`,
 
 - `expirymonth`,
 
