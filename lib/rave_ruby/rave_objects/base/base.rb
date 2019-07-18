@@ -5,6 +5,7 @@ require_relative "../../error"
 
 class Base
 
+
   attr_reader :rave_object, :get_hashed_key
 
   # method to initialize this class
@@ -37,7 +38,7 @@ class Base
     begin
       response = HTTParty.get(endpoint, http_params)
       unless (response.code == 200 || response.code == 201)
-        raise RaveServerError.new(response), "HTTP Code #{response.code}: #{response.body}"
+        raise RaveServerError.new(response), response
       end
 
       # response_body = response.body
@@ -70,7 +71,7 @@ class Base
       })
 
       unless (response.code == 200 || response.code == 201)
-        raise RaveServerError.new(response), "HTTP Code #{response.code}: #{response.body}"
+        raise RaveServerError.new(response), response["message"]
       end
 
       return response

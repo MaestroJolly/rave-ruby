@@ -9,7 +9,7 @@ class SubAccount < SubAccountBase
 
         data.merge!({"seckey" => rave_object.secret_key.dup})
 
-        required_parameters = ["account_bank", "account_number", "business_name", "business_email", "business_contact", "business_contact_mobile", "business_mobile", "split_type", "split_value"]
+        required_parameters = ["account_bank", "account_number", "business_name", "business_email", "business_contact", "business_contact_mobile", "business_mobile", "split_type", "split_value", "country"]
         check_passed_parameters(required_parameters, data)
 
         payload = data.to_json
