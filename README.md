@@ -947,6 +947,8 @@ This function is called to initiate subaccount transaction. The payload should b
 
 - `split_value`,
 
+- `country`
+
 #### `NOTE:` 
 
 - split_type can be set as percentage or flat when set as percentage it means you want to take a percentage fee on all transactions, and vice versa for flat this means you want to take a flat fee on every transaction.
@@ -1055,6 +1057,7 @@ payload = {
 	"business_mobile" => "0188883882",
     "split_type" => "flat",
     "split_value" => 3000,
+    "country"=>"NG",
 	"meta" => [{"metaname": "MarketplaceID", "metavalue": "ggs-920900"}]
 }
 
