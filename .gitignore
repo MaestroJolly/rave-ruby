@@ -21,4 +21,9 @@ subscriptionTest.rb
 uganda_mobile_money_test.rb
 zambia_mobile_money_test.rb
 payment_plan_test.rb
+test.rb
+subtest.rb
+bulk_transfer.rb
+chargeauth.rb
+transferTest.rb
 env.rb
