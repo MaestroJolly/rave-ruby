@@ -797,7 +797,8 @@ payload = {
     "phonenumber" => "08082000503",
     "network" => "MTN",
     "redirect_url" => "https://webhook.site/6eb017d1-c605-4faa-b543-949712931895",
-    "IP" => ""
+    "IP" => "",
+    "vocher" => "128373"
 }
 
 # To initiate mobile money transaction
