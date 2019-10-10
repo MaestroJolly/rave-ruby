@@ -15,6 +15,7 @@ class MobileMoneyBase < Base
         auth_model_used = charge_response["data"]["authModelUsed"]
         charge_response_code = charge_response["data"]["chargeResponseCode"]
         charge_response_message = charge_response["data"]["chargeResponseMessage"]
+        
 
 
         if charge_response_code == "00"

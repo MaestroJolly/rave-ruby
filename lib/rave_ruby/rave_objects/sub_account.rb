@@ -9,7 +9,7 @@ class SubAccount < SubAccountBase
 
         data.merge!({"seckey" => rave_object.secret_key.dup})
 
-        required_parameters = ["account_bank", "account_number", "business_name", "business_email", "business_contact", "business_contact_mobile", "business_mobile", "split_type", "split_value"]
+        required_parameters = ["account_bank", "account_number", "business_name", "business_email", "business_contact", "business_contact_mobile", "business_mobile", "split_type", "split_value", "country"]
         check_passed_parameters(required_parameters, data)
 
         payload = data.to_json
@@ -50,6 +50,19 @@ class SubAccount < SubAccountBase
         payload = payload.to_json
 
         response = post_request("#{base_url}#{BASE_ENDPOINTS::SUBACCOUNT_ENDPOINT}/delete", payload)
+        return handle_subaccount_response(response)
+    end
+
+    #method to update sub account
+    def update_subaccount(id)
+        base_url = rave_object.base_url
+
+        payload = id
+        payload.store("seckey", rave_object.secret_key.dup)
+
+        payload = payload.to_json
+
+        response = post_request("#{base_url}#{BASE_ENDPOINTS::SUBACCOUNT_ENDPOINT}/edit", payload)
         return handle_subaccount_response(response)
     end
 end

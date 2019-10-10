@@ -40,10 +40,9 @@ class ChargeBase < Base
   def handle_charge_response (response)
 
     charge_response = response
-    # print charge_response
+
     flwRef = charge_response["data"]["flwRef"]
     txRef = charge_response["data"]["txRef"]
-    # status = charge_response["data"]["status"]
     message = charge_response["message"]
     status = charge_response["status"]
     suggested_auth = charge_response["data"]["suggested_auth"]
