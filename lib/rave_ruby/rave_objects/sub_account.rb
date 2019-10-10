@@ -52,4 +52,17 @@ class SubAccount < SubAccountBase
         response = post_request("#{base_url}#{BASE_ENDPOINTS::SUBACCOUNT_ENDPOINT}/delete", payload)
         return handle_subaccount_response(response)
     end
+
+    #method to update sub account
+    def update_subaccount(id)
+        base_url = rave_object.base_url
+
+        payload = id
+        payload.store("seckey", rave_object.secret_key.dup)
+
+        payload = payload.to_json
+
+        response = post_request("#{base_url}#{BASE_ENDPOINTS::SUBACCOUNT_ENDPOINT}/edit", payload)
+        return handle_subaccount_response(response)
+    end
 end
